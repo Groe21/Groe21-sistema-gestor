@@ -1,13 +1,18 @@
 <?php
-
-require_once __DIR__ . '/../config/config.php';
-
-if (!isset($_SESSION['id']) || empty($_SESSION['nombre']) || empty($_SESSION['rol'])) {
-    header("Location: login.php");
+include_once(__DIR__ . '/../config/config.php'); // Asegúrate de incluir el archivo de configuración
+if (!isset($_SESSION['usuario'])) {
+    header('Location: ' . BASE_URL . '/login.php');
     exit();
 }
 
+// Función para cerrar sesión
+if (isset($_GET['logout'])) {
+    session_destroy();
+    header('Location: ' . BASE_URL . '/login.php');
+    exit();
+}
 ?>
+
 <nav class="navbar navbar-expand navbar-light bg-warning topbar mb-4 static-top shadow">
 
     <!-- Alternar barra lateral (Barra superior) -->
@@ -77,7 +82,13 @@ if (!isset($_SESSION['id']) || empty($_SESSION['nombre']) || empty($_SESSION['ro
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">
-                    <?php echo $_SESSION["nombre"]; ?>
+                    <?php
+                    if (isset($_SESSION['usuario']['nombres'])) {
+                        echo $_SESSION['usuario']['nombres'];
+                    } else {
+                        echo $_SESSION['usuario']['cedula']; // Mostrar la cédula si no hay nombres
+                    }
+                    ?>
                 </span>
                 <img class="img-profile rounded-circle" src="<?php echo BASE_URL; ?>/img/undraw_profile.svg">
             </a>
@@ -107,3 +118,23 @@ if (!isset($_SESSION['id']) || empty($_SESSION['nombre']) || empty($_SESSION['ro
     </ul>
 
 </nav>
+
+<!-- Modal de Cierre de Sesión-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">¿Listo para salir?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Seleccione "Cerrar sesión" a continuación si está listo para finalizar su sesión actual.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+                <a class="btn btn-primary" href="<?php echo BASE_URL; ?>/include/Barra_superior.php?logout=true">Cerrar sesión</a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,29 +1,8 @@
 <?php
 session_start();
-include_once ('config/conexion.php');
-include_once ('models/usuarios/roles.php');
-// Incluye la clase Estudiante
-include_once('models/estudiantes/obtener_estudiantes.php');
-
-// Crea una instancia de la clase Estudiante
-$estudiante = new Estudiante($conexion);
-
-// Obtiene los datos de estudiantes
-$totalInactivos = $estudiante->obtenerEstudiantesInactivos();
-$totalActivos = $estudiante->obtenerEstudiantesActivos();
-$totalEstudiantes = $estudiante->obtenerTotalEstudiantes();
-
-// Crear una instancia de la clase ObtenerEstudiantes
-$estudiante = new ObtenerEstudiantes($conexion);
-try {
-    // Obtener los datos de los estudiantes
-    $estudiantes = $estudiante->obtenerEstudiantes();
-} catch (Exception $e) {
-    echo "Error: " . $e->getMessage();
-    exit;
-}
-
-
+ob_start();
+include_once(__DIR__ . '/config/config.php');
+include_once(__DIR__ . '/config/conexion.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -57,7 +36,7 @@ try {
     <div id="wrapper">
 
         <!-- Barra lateral -->
-        <?php include_once ('include\barra_lateral.php'); ?>
+        <?php include_once(__DIR__ . '/include/barra_lateral.php'); ?>
         <!-- Fin de la barra lateral -->
 
         <!-- Contenedor de contenido -->
@@ -67,7 +46,7 @@ try {
             <div id="content">
 
             <!-- Barra superior -->
-            <?php include_once ('include\barra_superior.php'); ?>
+            <?php include_once(__DIR__ . '/include/barra_superior.php'); ?>
             <!-- Fin de la barra superior -->
 
             <!-- Comienzo del contenido de la página -->
@@ -81,125 +60,25 @@ try {
                 <!-- Fila de contenido -->
                 <div class="row">
 
-                    <!-- Tarjeta de estudiantes inactivos -->
+                    <!-- Tarjeta de ejemplo sin PHP -->
                     <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card border-left-primary shadow h-100 py-2">
+                        <div class="card border-left-warning shadow h-100 py-2">
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                            Estudiantes Inactivos
+                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                            Ejemplo Sin PHP
                                         </div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $totalInactivos; ?></div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">123</div>
                                     </div>
                                     <div class="col-auto">
-                                        <i class="fas fa-user-slash fa-2x text-gray-300"></i>
+                                        <i class="fas fa-exclamation-triangle fa-2x text-gray-300"></i>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Tarjeta de estudiantes activos -->
-                    <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card border-left-success shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                            Estudiantes Activos
-                                        </div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $totalActivos; ?></div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-user-check fa-2x text-gray-300"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Tarjeta de total de estudiantes -->
-                    <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card border-left-info shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                            Total Estudiantes
-                                        </div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $totalEstudiantes; ?></div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-users fa-2x text-gray-300"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <!-- Fila de la tabla de estudiantes -->
-                <div class="row justify-content-center">
-                    <div class="col-xl-10 col-lg-12">
-                        <div class="card shadow mb-4">
-                            <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Lista de Estudiantes</h6>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                        <thead>
-                                            <tr>
-                                                <th>N°</th>
-                                                <th>Cedula</th>
-                                                <th>Nombres</th>
-                                                <th>Apellidos</th>
-                                                <th>Dirección</th>
-                                                <th>Discapacidad</th>
-                                                <th>Representante</th>
-                                                <th>Telefono</th>
-                                                <th>Opciones</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php foreach ($estudiantes as $row): ?>
-                                                <tr>
-                                                    <td><?php echo $row['id']; ?></td>
-                                                    <td><?php echo $row['cedula']; ?></td>
-                                                    <td><?php echo $row['nombres']; ?></td>
-                                                    <td><?php echo $row['apellidos']; ?></td>
-                                                    <td><?php echo $row['direccion']; ?></td>
-                                                    <td><?php echo $row['discapacidad']; ?></td>
-                                                    <td><?php echo $row['apellidos_nombres']; ?></td>
-                                                    <td><?php echo $row['telefono']; ?></td>
-                                                    <td>
-                                                        <div style="display: flex; align-items: center;">
-                                                            <form action="matriculacion.php" method="post" id="actForm">
-                                                                <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                                                                <button id="actualizar" class="hand-cursor" type="submit" value="<?php echo $row['id']; ?>" style="background-color: var(--c);">
-                                                                    <i class="fas fa-user-check" style="font-size: 28px; color: #ec1d17;"></i>
-                                                                </button>
-                                                            </form>
-                                                            <?php if ($_SESSION['rol'] == "admin" || $_SESSION['rol'] == "secretariado"): ?>
-                                                                <form action="../controller/eliminar_prematricula.php" method="post" id="eliminarForm">
-                                                                    <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                                                                    <button class="hand-cursor" type="button" onclick="alerta_eliminar(<?php echo $row['id']; ?>)" style="background-color: var(--c);">
-                                                                        <i class="fas fa-trash-alt" style="font-size: 28px; color: #ec1d17; margin-left:10px;"></i>
-                                                                    </button>
-                                                                </form>
-                                                            <?php endif; ?>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            <?php endforeach; ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
             </div>
@@ -266,6 +145,9 @@ try {
     <script src="js/demo/chart-area-demo.js"></script>
     <script src="js/demo/chart-pie-demo.js"></script>
 
+    <?php ob_end_flush(); ?>
+
 </body>
+
 
 </html>

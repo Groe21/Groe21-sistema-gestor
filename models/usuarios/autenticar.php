@@ -2,61 +2,47 @@
 session_start();
 include_once(__DIR__ . '/../../config/conexion.php');
 
-if (!empty($_POST["btningresar"])) {
-    if (!empty($_POST["usuario"]) && !empty($_POST["contrasena"])) {
-        $usuario = $_POST["usuario"];
-        $contrasena = $_POST["contrasena"];
+class Autenticacion {
+    private $pdo;
 
-        try {
-            $conexion = conectarBaseDeDatos();
+    public function __construct($pdo) {
+        $this->pdo = $pdo;
+    }
 
-            $sql = "SELECT id, usuario, rol, estado FROM usuarios WHERE usuario = :usuario AND contrasena = :contrasena";
-            $stmt = $conexion->prepare($sql);
-            $stmt->bindParam(':usuario', $usuario);
-            $stmt->bindParam(':contrasena', $contrasena);
-            $stmt->execute();
+    public function autenticarUsuario($username, $password) {
+        $sql = "SELECT * FROM escuela.usuarios WHERE username = :username";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':username' => $username]);
+        $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            if ($result) {
-                if ($result['estado'] == true) {
-                    $_SESSION["id"] = $result['id'];
-                    $_SESSION["nombre"] = $result['usuario'];
-                    $_SESSION["rol"] = $result['rol'];
-
-                    if ($result['rol'] == 'disenador') {
-                        // Redirigir al diseñador a una página específica
-                        header("Location: ../web2/administrativo.php");
-                    } else {
-                        // Redirigir a la página principal del dashboard
-                        header("Location: ../../principal.php");
-                    }
-                    exit(); // Salir del script después de redireccionar
-                } else {
-                    mostrarAlerta("Acceso no permitido", "El acceso no está permitido en este momento.");
-                }
-            } else {
-                mostrarAlerta("Error", "Usuario o contraseña incorrectos!");
-            }
-
-            $stmt->closeCursor(); // Cerrar el cursor antes de cerrar la conexión
-            $conexion = null; // Cerrar la conexión
-        } catch (PDOException $e) {
-            echo "Error: " . $e->getMessage();
+        if ($usuario && password_verify($password, $usuario['password'])) {
+            return $usuario;
+        } else {
+            return false;
         }
     }
 }
 
-function mostrarAlerta($title, $text)
-{
-    echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
-    echo '<script>
-        document.addEventListener("DOMContentLoaded", function() {
-            Swal.fire({
-                icon: "error",
-                title: "' . $title . '",
-                text: "' . $text . '",
-            });
-        });
-    </script>';
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $username = $_POST['usuario'];
+    $password = $_POST['contrasena'];
+
+    $pdo = conectarBaseDeDatos();
+    $autenticacion = new Autenticacion($pdo);
+    $usuario = $autenticacion->autenticarUsuario($username, $password);
+
+    if ($usuario) {
+        // Almacena la cédula en la sesión
+        $_SESSION['usuario'] = [
+            'cedula' => $usuario['username'], // Asumiendo que 'username' es la cédula
+            'nombres' => $usuario['nombres'] // Asegúrate de que 'nombres' esté presente en la base de datos
+        ];
+        header('Location: ../../principal.php'); // Redirigir a la página principal o dashboard
+        exit();
+    } else {
+        $_SESSION['error'] = 'Nombre de usuario o contraseña incorrectos';
+        header('Location: ../../login.php'); // Redirigir de vuelta al login
+        exit();
+    }
 }
+?>

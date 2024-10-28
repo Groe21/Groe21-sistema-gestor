@@ -2,14 +2,14 @@
 function conectarBaseDeDatos()
 {
     $host = 'localhost';
-    $port = '3306'; // Puerto por defecto de MySQL
-    $dbname = 'arias'; // Nombre de la base de datos MySQL
-    $user = 'root'; // Nombre de usuario de MySQL
-    $password = ''; // Contraseña de MySQL
+    $port = '5432'; // Puerto por defecto de PostgreSQL
+    $dbname = 'aguilas_del_saber'; // Nombre de la base de datos PostgreSQL
+    $user = 'emilio'; // Nombre de usuario de PostgreSQL
+    $password = 'tkmch2005'; // Contraseña de PostgreSQL
 
     // Conexión a la base de datos
     try {
-        $pdo = new PDO("mysql:host=$host;port=$port;dbname=$dbname", $user, $password);
+        $pdo = new PDO("pgsql:host=$host;port=$port;dbname=$dbname", $user, $password);
         // Configuración para manejar errores y excepciones de PDO
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         

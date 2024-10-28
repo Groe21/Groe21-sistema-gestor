@@ -1,11 +1,4 @@
-<?php
-require_once __DIR__ . '/../config/config.php';
 
-if (!isset($_SESSION['id']) || empty($_SESSION['nombre']) || empty($_SESSION['rol'])) {
-    header("location: login.php");
-    exit();
-}
-?>
 
 <ul class="navbar-nav bg-gradient-danger sidebar sidebar-dark accordion" id="accordionSidebar">
 
@@ -28,14 +21,60 @@ if (!isset($_SESSION['id']) || empty($_SESSION['nombre']) || empty($_SESSION['ro
     </div>
 
     <!-- Elemento de navegación - Inicio -->
-    <?php if (isOptionAllowed('dashboard', $_SESSION['rol'])) { ?>
-        <li class="nav-item">
-            <a class="nav-link" href="<?php echo BASE_URL; ?>/principal.php">
-                <i class="fas fa-home"></i>
-                <span>Inicio</span>
-            </a>
-        </li>
-    <?php } ?>
+    <li class="nav-item">
+        <a class="nav-link" href="<?php echo BASE_URL; ?>/principal.php">
+            <i class="fas fa-home"></i>
+            <span>Inicio</span>
+        </a>
+    </li>
+
+    <!-- Divisor -->
+    <hr class="sidebar-divider">
+
+    <!-- Encabezado -->
+    <div class="sidebar-heading">
+        Gestión de Personas
+    </div>
+
+    <!-- Dropdown - Gestión de Personas -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePersonas"
+            aria-expanded="true" aria-controls="collapsePersonas">
+            <i class="fas fa-users"></i>
+            <span>Personas</span>
+        </a>
+        <div id="collapsePersonas" class="collapse" aria-labelledby="headingPersonas" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Gestión de Personas:</h6>
+                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/personas/crear_persona.php">Crear Persona</a>
+                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/personas/listado_personas.php">Listado de Personas</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Divisor -->
+    <hr class="sidebar-divider">
+
+    <!-- Encabezado -->
+    <div class="sidebar-heading">
+        Gestión de Usuarios
+    </div>
+
+    <!-- Dropdown - Gestión de Usuarios -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUsuarios"
+            aria-expanded="true" aria-controls="collapseUsuarios">
+            <i class="fas fa-user-cog"></i>
+            <span>Usuarios</span>
+        </a>
+        <div id="collapseUsuarios" class="collapse" aria-labelledby="headingUsuarios" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Gestión de Usuarios:</h6>
+                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/usuarios/crear_usuario.php">Crear Usuario</a>
+                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/usuarios/listado_usuarios.php">Listado de Usuarios</a>
+            </div>
+        </div>
+    </li>
 
     <!-- Divisor -->
     <hr class="sidebar-divider">
@@ -55,52 +94,20 @@ if (!isset($_SESSION['id']) || empty($_SESSION['nombre']) || empty($_SESSION['ro
         <div id="collapseEstudiantes" class="collapse" aria-labelledby="headingEstudiantes" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Gestión de Estudiantes:</h6>
-                <?php if (isOptionAllowed('matricula', $_SESSION['rol'])) { ?>
-                    <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/estudiantes/matricular_estudiante.php">Matricular Estudiante</a>
-                <?php } ?>
-                <?php if (isOptionAllowed('responsables', $_SESSION['rol'])) { ?>
-                    <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/estudiantes/tabresponsable.php">Responsables</a>
-                <?php } ?>
-                <?php if (isOptionAllowed('matriculados', $_SESSION['rol'])) { ?>
-                    <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/estudiantes/estudiantes.php">Matriculados</a>
-                <?php } ?>
-                <?php if (isOptionAllowed('listado', $_SESSION['rol'])) { ?>
-                    <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/estudiantes/listado_estudiantes.php">Listado Estudiantes</a>
-                <?php } ?>
-                <?php if (isOptionAllowed('culminados', $_SESSION['rol'])) { ?>
-                    <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/estudiantes/periodos_culminados.php">Períodos Culminados</a>
-                <?php } ?>
-                <?php if (isOptionAllowed('inactivos', $_SESSION['rol'])) { ?>
-                    <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/estudiantes/inactivos.php">Estudiantes Inactivos</a>
-                <?php } ?>
+                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/estudiantes/matricular_estudiante.php">Matricular Estudiante</a>
+                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/estudiantes/tabresponsable.php">Responsables</a>
+                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/estudiantes/estudiantes.php">Matriculados</a>
+                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/estudiantes/listado_estudiantes.php">Listado Estudiantes</a>
+                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/estudiantes/periodos_culminados.php">Períodos Culminados</a>
+                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/estudiantes/inactivos.php">Estudiantes Inactivos</a>
             </div>
         </div>
     </li>
+
 
     <!-- Divisor -->
     <hr class="sidebar-divider">
 
-    <!-- Encabezado -->
-    <div class="sidebar-heading">
-        Configuración
-    </div>
-
-    <!-- Dropdown - Configuración -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseConfiguracion"
-            aria-expanded="true" aria-controls="collapseConfiguracion">
-            <i class="fas fa-cogs"></i>
-            <span>Opciones</span>
-        </a>
-        <div id="collapseConfiguracion" class="collapse" aria-labelledby="headingConfiguracion" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Configuración:</h6>
-                <?php if (isOptionAllowed('opciones', $_SESSION['rol'])) { ?>
-                    <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/administracion/tab_opciones.php">Opciones</a>
-                <?php } ?>
-            </div>
-        </div>
-    </li>
 
     <!-- Divisor -->
     <hr class="sidebar-divider">

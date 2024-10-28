@@ -1,3 +1,3 @@
 <?php
-define('BASE_URL', '/sistema--gestor');
+define('BASE_URL', '/Groe21-sistema-gestor');
 ?>

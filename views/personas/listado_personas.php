@@ -1,9 +1,7 @@
 <?php
-
+include_once(__DIR__ . '/../../config/config.php');
 session_start();
 include_once(__DIR__ . '/../../config/conexion.php');
-include_once(__DIR__ . '/../../models/usuarios/roles.php');
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -16,7 +14,7 @@ include_once(__DIR__ . '/../../models/usuarios/roles.php');
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Matriculas</title>
+    <title>Listado Personas</title>
 
     <!-- Custom fonts for this template-->
     <link href="../../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -55,13 +53,13 @@ include_once(__DIR__ . '/../../models/usuarios/roles.php');
 
                 <!-- Encabezado de la página -->
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 class="h3 mb-0 text-gray-800">Matricular Estudiante</h1>
+                    <h1 class="h3 mb-0 text-gray-800">Listado personas</h1>
                 </div>
 
                 <!-- Fila de contenido -->
                 <div class="row">
 
-                <?php include_once(__DIR__ . '/formulario_matriculacion.php'); ?>
+
 
                 </div>
             </div>

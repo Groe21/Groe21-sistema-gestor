@@ -24,42 +24,38 @@ include_once("models/usuarios/autenticar.php");
 
 <body class="d-flex justify-content-center align-items-center vh-100">
 
-    <div class=" p-5  text-secondary shadow"
-        style="border-radius: 20px; width: 30rem ;height:35rem; background: rgba(255, 255, 255, 0.50);">
-
+    <div class="p-5 text-secondary shadow" style="border-radius: 20px; width: 30rem; height: 35rem; background: rgba(255, 255, 255, 0.50);">
         <div class="d-flex justify-content-center">
             <img src="img/logo23.png" alt="login-icon" style="height: 10rem" />
-        </div class="text-center fs-3 fw-bold">
-
-        <div style="-webkit-text-fill-color: #ec1d17;" class="text-center fs-4 fw-bold">LAS AGUILAS</div>
+        </div>
+        <div class="text-center fs-4 fw-bold" style="-webkit-text-fill-color: #ec1d17;">LAS AGUILAS</div>
         <div class="text-center fs-5 fw-bold" style="color: #ec1d17;">DEL SABER</div>
 
         <form action="models/usuarios/autenticar.php" method="post">
-    <div class="input-group mt-4" style="height: 3rem;">
-        <div class="input-group-text bg-light">
-            <span class="material-icons-sharp">person</span>
-        </div>
-        <input class="form-control bg-light" type="text" placeholder="Usuario" name="usuario" />
-    </div>
+            <div class="input-group mt-4" style="height: 3rem;">
+                <div class="input-group-text bg-light">
+                    <span class="material-icons-sharp">person</span>
+                </div>
+                <input class="form-control bg-light" type="text" placeholder="Usuario" name="usuario" required />
+            </div>
 
-    <div class="input-group mt-3" style="height: 3rem;">
-        <div class="input-group-text bg-light">
-            <span class="material-icons-sharp">lock</span>
-        </div>
-        <input class="password form-control bg-light" type="password" placeholder="Contraseña" name="contrasena">
-        <span class="input-group-text">
-            <button class="btn-show-pass" type="button" onclick="showPassword()">
-                <i class="icon fas fa-eye-slash"></i>
+            <div class="input-group mt-3" style="height: 3rem;">
+                <div class="input-group-text bg-light">
+                    <span class="material-icons-sharp">lock</span>
+                </div>
+                <input class="password form-control bg-light" type="password" placeholder="Contraseña" name="contrasena" required>
+                <span class="input-group-text">
+                    <button class="btn-show-pass" type="button" onclick="showPassword()">
+                        <i class="icon fas fa-eye-slash"></i>
+                    </button>
+                </span>
+            </div>
+
+            <button style="border-radius: 10px; background: #ec1d17;" class="btn text-white w-100 mt-4 fw-semibold shadow-sm" type="submit" name="btningresar" value="Iniciar Sesion">
+                INGRESAR
             </button>
-        </span>
+        </form>
     </div>
-
-    <button style="border-radius: 10px; background: #ec1d17;" class="btn text-white w-100 mt-4 fw-semibold shadow-sm" type="submit" name="btningresar" value="Iniciar Sesion">
-        INGRESAR
-    </button>
-</form>
-    </div>
-
 </body>
 
 
