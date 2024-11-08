@@ -1,10 +1,11 @@
 <?php
 include_once(__DIR__ . '/../../config/config.php');
 session_start();
-include_once(__DIR__ . '/../../models/personas/mostrar_personas.php');
+include_once(__DIR__ . '/../../models/usuarios/mostrar_usuarios.php');
 
-$pdo = conectarBaseDeDatos(); 
-$mostrarPersonas = new MostrarPersonas($pdo);
+$pdo = conectarBaseDeDatos();
+$usuario = new Usuario($pdo);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,7 +18,7 @@ $mostrarPersonas = new MostrarPersonas($pdo);
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Listado Personas</title>
+    <title>Listado Usuario</title>
 
     <!-- Custom fonts for this template-->
     <link href="../../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -35,6 +36,7 @@ $mostrarPersonas = new MostrarPersonas($pdo);
 
     <!-- DataTables JS -->
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
 
 </head>
 
@@ -62,13 +64,15 @@ $mostrarPersonas = new MostrarPersonas($pdo);
 
                 <!-- Encabezado de la página -->
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">Listado personas</h1>
+                    <h1 class="h3 mb-0 text-gray-800">Listado de Usuarios</h1>
                 </div>
-                
+
                 <!-- Fila de contenido -->
                 <div class="row">
-                <?php $mostrarPersonas->mostrarTablaPersonas(); ?>
+                        <!-- Tabla de usuarios -->
+                    <?php $usuario->mostrarTablaUsuarios(); ?>
                 </div>
+
             </div>
             <!-- /.contenedor-fluido -->
 
@@ -96,25 +100,8 @@ $mostrarPersonas = new MostrarPersonas($pdo);
         <i class="fas fa-angle-up"></i>
     </a>
 
-    <!-- Modal de Cierre de Sesión-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">¿Listo para salir?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Seleccione "Cerrar sesión" a continuación si está listo para finalizar su sesión actual.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
-                    <a class="btn btn-primary" href="login.html">Cerrar sesión</a>
-                </div>
-            </div>
-        </div>
-    </div>
+
+
 
     <!-- Bootstrap core JavaScript-->
     <script src="../../vendor/jquery/jquery.min.js"></script>
@@ -125,7 +112,6 @@ $mostrarPersonas = new MostrarPersonas($pdo);
 
     <!-- Custom scripts for all pages-->
     <script src="../../js/sb-admin-2.min.js"></script>
-    <script src="../../js/discapacidad.js"></script>
 
     <!-- Page level plugins -->
     <script src="../../vendor/chart.js/Chart.min.js"></script>
@@ -133,18 +119,20 @@ $mostrarPersonas = new MostrarPersonas($pdo);
     <!-- Page level custom scripts -->
     <script src="../../js/demo/chart-area-demo.js"></script>
     <script src="../../js/demo/chart-pie-demo.js"></script>
-    <!-- DataTables JS -->
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+     <!-- DataTables JS -->
+     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script>
-    $(document).ready(function() {
-        $('#tablaPersonas').DataTable({
-            "pageLength": 10,
-            "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.13.1/i18n/es-ES.json"
-            }
+        $(document).ready(function() {
+            $('#tablaUsuarios').DataTable({
+                "pageLength": 10,
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.13.1/i18n/es-ES.json"
+                }
+            });
         });
-    });
-</script>
+    </script>
+
 </body>
 
 </html>

@@ -1,5 +1,6 @@
 <?php
-include_once(__DIR__ . '/../config/config.php'); // Asegúrate de incluir el archivo de configuración
+include_once(__DIR__ . '/../config/config.php');
+include_once(__DIR__ . '/../config/conexion.php'); // Asegúrate de incluir el archivo de configuración
 if (!isset($_SESSION['usuario'])) {
     header('Location: ' . BASE_URL . '/login.php');
     exit();

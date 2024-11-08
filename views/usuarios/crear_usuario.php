@@ -1,7 +1,6 @@
 <?php
 include_once(__DIR__ . '/../../config/config.php');
 session_start();
-include_once(__DIR__ . '/../../config/conexion.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -58,47 +57,47 @@ include_once(__DIR__ . '/../../config/conexion.php');
 
                 <!-- Fila de contenido -->
                 <div class="row">
-    <div class="col-lg-6 mx-auto">
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Buscar Persona</h6>
-            </div>
-            <div class="card-body">
-                <form id="buscarPersonaForm">
-                    <div class="form-group">
-                        <label for="cedula">Cédula:</label>
-                        <input type="text" class="form-control" id="cedula" name="cedula" required>
-                        <button type="button" class="btn btn-primary mt-2" onclick="buscarPersona()">Buscar Persona</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+                    <div class="col-lg-12 mx-auto">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Buscar Persona</h6>
+                            </div>
+                            <div class="card-body">
+                                <form id="buscarPersonaForm">
+                                    <div class="form-group">
+                                        <label for="cedula">Cédula:</label>
+                                        <input type="text" class="form-control" id="cedula" name="cedula" required>
+                                        <button type="button" class="btn btn-primary mt-2" onclick="buscarPersona()">Buscar Persona</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
 
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Crear Usuario</h6>
-            </div>
-            <div class="card-body">
-                <form id="crearUsuarioForm" onsubmit="return crearUsuario(event)">
-                    <input type="hidden" id="id_persona" name="id_persona" required>
-                    <div class="form-group">
-                        <label for="nombre_completo">Nombre:</label>
-                        <input type="text" class="form-control" id="nombre_completo" name="nombre_completo" readonly required>
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Crear Usuario</h6>
+                            </div>
+                            <div class="card-body">
+                                <form id="crearUsuarioForm" onsubmit="return crearUsuario(event)">
+                                    <input type="hidden" id="id_persona" name="id_persona" required>
+                                    <div class="form-group">
+                                        <label for="nombre_completo">Nombre:</label>
+                                        <input type="text" class="form-control" id="nombre_completo" name="nombre_completo" readonly required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="username">Usuario:</label>
+                                        <input type="text" class="form-control" id="username" name="username" readonly required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="password">Contraseña:</label>
+                                        <input type="password" class="form-control" id="password" name="password" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Crear Usuario</button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="username">Usuario:</label>
-                        <input type="text" class="form-control" id="username" name="username" readonly required>
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Contraseña:</label>
-                        <input type="password" class="form-control" id="password" name="password" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Crear Usuario</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+                </div>
 
             </div>
             <!-- /.contenedor-fluido -->
@@ -110,7 +109,7 @@ include_once(__DIR__ . '/../../config/conexion.php');
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                    <span>&copy; Las Guilas del saber. Nos reservamos los derechos  </span>
+                    <span>&copy; Las Águilas del saber. Nos reservamos los derechos  </span>
                     </div>
                 </div>
             </footer>
@@ -148,24 +147,24 @@ include_once(__DIR__ . '/../../config/conexion.php');
     </div>
 
     <!-- Modal de éxito -->
-<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="successModalLabel">Éxito</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Usuario creado exitosamente.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="location.reload()">Aceptar</button>
+    <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="successModalLabel">Éxito</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Usuario creado exitosamente.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="location.reload()">Aceptar</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
     <!-- Bootstrap core JavaScript-->
     <script src="../../vendor/jquery/jquery.min.js"></script>
@@ -185,51 +184,51 @@ include_once(__DIR__ . '/../../config/conexion.php');
     <script src="../../js/demo/chart-pie-demo.js"></script>
 
     <script>
-function buscarPersona() {
-    const cedula = document.getElementById('cedula').value;
+    function buscarPersona() {
+        const cedula = document.getElementById('cedula').value;
 
-    fetch('<?php echo BASE_URL; ?>/models/personas/buscar_persona.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: `cedula=${cedula}`
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data); // Agregar este log para ver la respuesta
-        if (data.error) {
-            alert(data.error);
-        } else {
-            document.getElementById('id_persona').value = data.id_persona;
-            document.getElementById('username').value = data.cedula;
-            document.getElementById('nombre_completo').value = `${data.nombres} ${data.apellidos}`;
-        }
-    })
-    .catch(error => console.error('Error:', error));
-}
+        fetch('<?php echo BASE_URL; ?>/models/personas/buscar_persona.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `cedula=${cedula}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data); // Agregar este log para ver la respuesta
+            if (data.error) {
+                alert(data.error);
+            } else {
+                document.getElementById('id_persona').value = data.id_persona;
+                document.getElementById('username').value = data.cedula;
+                document.getElementById('nombre_completo').value = `${data.nombres} ${data.apellidos}`;
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
 
-function crearUsuario(event) {
-    event.preventDefault();
+    function crearUsuario(event) {
+        event.preventDefault();
 
-    const form = document.getElementById('crearUsuarioForm');
-    const formData = new FormData(form);
+        const form = document.getElementById('crearUsuarioForm');
+        const formData = new FormData(form);
 
-    fetch('<?php echo BASE_URL; ?>/models/usuarios/insertar_usuario.php', {
-        method: 'POST',
-        body: new URLSearchParams(formData)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            $('#successModal').modal('show');
-        } else {
-            alert('Error al crear el usuario.');
-        }
-    })
-    .catch(error => console.error('Error:', error));
-}
-</script>
+        fetch('<?php echo BASE_URL; ?>/models/usuarios/insertar_usuario.php', {
+            method: 'POST',
+            body: new URLSearchParams(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                $('#successModal').modal('show');
+            } else {
+                alert('Error al crear el usuario.');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+    </script>
 
 </body>
 

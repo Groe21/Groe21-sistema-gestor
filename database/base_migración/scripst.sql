@@ -9,7 +9,7 @@ CREATE TABLE escuela.personas (
     telefono VARCHAR(15),
     correo VARCHAR(50),
     foto VARCHAR(255),
-    rol VARCHAR(20) CHECK (rol IN ('estudiante', 'madre', 'padre', 'etc.'))
+    rol VARCHAR(20) CHECK (rol IN ('estudiante', 'madre', 'padre'))
 );
 
 -- Tabla estudiantes en el esquema escuela
@@ -66,3 +66,58 @@ CREATE TABLE escuela.usuarios (
     username VARCHAR(50) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL
 );
+
+-- Crear la tabla paralelos en el esquema escuela
+CREATE TABLE escuela.paralelos (
+    id_paralelo SERIAL PRIMARY KEY,
+    nombre_paralelo VARCHAR(10) NOT NULL
+);
+
+-- Crear la tabla profesores en el esquema escuela
+CREATE TABLE escuela.profesores (
+    id_profesor SERIAL PRIMARY KEY,
+    id_persona INT NOT NULL,
+    id_paralelo INT,
+    FOREIGN KEY (id_persona) REFERENCES escuela.personas(id_persona),
+    FOREIGN KEY (id_paralelo) REFERENCES escuela.paralelos(id_paralelo)
+);
+
+-- Actualizar la tabla personas en el esquema escuela
+ALTER TABLE escuela.personas
+    DROP CONSTRAINT IF EXISTS personas_rol_check,
+    ADD CONSTRAINT personas_rol_check CHECK (rol IN ('estudiante', 'madre', 'padre', 'profesor', 'administrador'));
+	
+	
+CREATE TABLE escuela.asignaciones (
+    id_asignacion SERIAL PRIMARY KEY,
+    id_profesor INT NOT NULL,
+    id_paralelo INT NOT NULL,
+    FOREIGN KEY (id_profesor) REFERENCES escuela.personas(id_persona),
+    FOREIGN KEY (id_paralelo) REFERENCES escuela.paralelos(id_paralelo),
+    UNIQUE (id_profesor, id_paralelo)
+);
+
+-- Crear tabla madres
+CREATE TABLE escuela.madres (
+    id_madre SERIAL PRIMARY KEY,
+    id_persona INT REFERENCES escuela.personas(id_persona),
+    ocupacion VARCHAR(50),
+    telefono VARCHAR(15),
+    correo VARCHAR(50)
+);
+
+-- Crear tabla padres
+CREATE TABLE escuela.padres (
+    id_padre SERIAL PRIMARY KEY,
+    id_persona INT REFERENCES escuela.personas(id_persona),
+    ocupacion VARCHAR(50),
+    telefono VARCHAR(15),
+    correo VARCHAR(50)
+);
+
+SELECT schema_name
+FROM information_schema.schemata
+WHERE schema_name = 'escuela';
+
+ALTER TABLE escuela.estudiantes
+DROP COLUMN grado;

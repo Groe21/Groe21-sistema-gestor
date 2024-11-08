@@ -15,11 +15,6 @@
     <!-- Divisor -->
     <hr class="sidebar-divider">
 
-    <!-- Encabezado -->
-    <div class="sidebar-heading">
-        Interfaz
-    </div>
-
     <!-- Elemento de navegación - Inicio -->
     <li class="nav-item">
         <a class="nav-link" href="<?php echo BASE_URL; ?>/principal.php">
@@ -31,32 +26,8 @@
     <!-- Divisor -->
     <hr class="sidebar-divider">
 
-    <!-- Encabezado -->
-    <div class="sidebar-heading">
-        Gestión de Personas
-    </div>
-
-    <!-- Dropdown - Gestión de Personas -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePersonas"
-            aria-expanded="true" aria-controls="collapsePersonas">
-            <i class="fas fa-users"></i>
-            <span>Personas</span>
-        </a>
-        <div id="collapsePersonas" class="collapse" aria-labelledby="headingPersonas" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Gestión de Personas:</h6>
-                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/personas/crear_persona.php">Crear Persona</a>
-                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/personas/listado_personas.php">Listado de Personas</a>
-            </div>
-        </div>
-    </li>
-
-    <!-- Divisor -->
-    <hr class="sidebar-divider">
-
-    <!-- Encabezado -->
-    <div class="sidebar-heading">
+     <!-- Encabezado -->
+     <div class="sidebar-heading">
         Gestión de Usuarios
     </div>
 
@@ -72,6 +43,32 @@
                 <h6 class="collapse-header">Gestión de Usuarios:</h6>
                 <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/usuarios/crear_usuario.php">Crear Usuario</a>
                 <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/usuarios/listado_usuarios.php">Listado de Usuarios</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Divisor -->
+    <hr class="sidebar-divider">
+
+    <!-- Encabezado -->
+    <div class="sidebar-heading">
+        Gestión de la Escuela
+    </div>
+
+    <!-- Dropdown - Gestión de la Escuela -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseEscuela"
+            aria-expanded="true" aria-controls="collapseEscuela">
+            <i class="fas fa-school"></i>
+            <span>Escuela</span>
+        </a>
+        <div id="collapseEscuela" class="collapse" aria-labelledby="headingEscuela" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Gestión de la Escuela:</h6>
+                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/escuela/gestionar_cursos.php">Cursos</a>
+                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/escuela/gestionar_profesores.php">Profesores</a>
+                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/personas/crear_persona.php">Agregar Nueva Persona</a>
+                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/personas/listado_personas.php">Listado de Personas</a>
             </div>
         </div>
     </li>
@@ -111,10 +108,5 @@
 
     <!-- Divisor -->
     <hr class="sidebar-divider">
-
-    <!-- Alternador de barra lateral (Barra lateral) -->
-    <!-- <div class="text-center d-none d-md-inline">
-        <button class="rounded-circle border-0" id="sidebarToggle"></button>
-    </div> -->
 
 </ul>

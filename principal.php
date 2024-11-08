@@ -2,7 +2,6 @@
 session_start();
 ob_start();
 include_once(__DIR__ . '/config/config.php');
-include_once(__DIR__ . '/config/conexion.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -91,7 +90,7 @@ include_once(__DIR__ . '/config/conexion.php');
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                    <span>&copy; Las Guilas del saber. Nos reservamos los derechos  </span>
+                    <span>&copy; Las Águilas del saber. Nos reservamos los derechos  </span>
                     </div>
                 </div>
             </footer>

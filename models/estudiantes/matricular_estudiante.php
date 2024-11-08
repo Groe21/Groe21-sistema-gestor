@@ -1,147 +1,86 @@
 <?php
 include_once(__DIR__ . '/../../config/conexion.php');
-session_start();
 
-try {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $conn = conectarBaseDeDatos();
-        $conn->beginTransaction();
-        $usuario = $_SESSION['nombre'];
+class MatricularEstudiante {
+    private $pdo;
 
-        // Datos del estudiante
-        $estudianteData = [
-            'cedula' => $_POST['cedula_estudiante'],
-            'apellidos' => $_POST['apellidos_estudiante'],
-            'nombres' => $_POST['nombres_estudiante'],
-            'lugar_nacimiento' => $_POST['lugar_nacimiento_estudiante'],
-            'residencia' => $_POST['residencia_estudiante'],
-            'direccion' => $_POST['direccion_estudiante'],
-            'sector' => $_POST['sector_estudiante'],
-            'fecha_nacimiento' => $_POST['fecha_nacimiento_estudiante'],
-            'codigo_unico' => $_POST['codigo_unico_estudiante'],
-            'condicion' => $_POST['condicion_estudiante'],
-            'foto' => procesarImagen($_FILES["imagen"]["tmp_name"]),
-            'created_by' => $usuario
-        ];
-
-        // Insertar estudiante
-        $idEstudiante = insertarEstudiante($conn, $estudianteData);
-
-        // Insertar matrícula
-        $matriculaData = [
-            'id_estudiante' => $idEstudiante,
-            'id_grado' => $_POST['grado'],
-            'id_paralelo' => $_POST['id_paralelo_estudiante']
-        ];
-        insertarMatricula($conn, $matriculaData);
-
-        // Insertar discapacidad si aplica
-        if ($estudianteData['condicion'] == 1) {
-            $discapacidadData = [
-                'tipo' => $_POST['tipo_discapacidad'],
-                'porcentaje' => $_POST['porcentaje_discapacidad'],
-                'carnet' => $_POST['carnet_discapacidad'],
-                'id_estudiante' => $idEstudiante
-            ];
-            insertarDiscapacidad($conn, $discapacidadData);
-        }
-
-        // Insertar datos de los padres y representante
-        $roles = ['Padre' => 'papa', 'Madre' => 'mama', 'Representante' => 'representante'];
-        foreach ($roles as $rol => $prefix) {
-            $personaData = [
-                'cedula' => $_POST["cedula_$prefix"],
-                'apellidos_nombres' => $_POST["apellidos_nombres_$prefix"],
-                'direccion' => $_POST["direccion_$prefix"],
-                'ocupacion' => $_POST["ocupacion_$prefix"],
-                'telefono' => $_POST["telefono_$prefix"],
-                'correo' => $_POST["correo_$prefix"],
-                'foto' => procesarImagen($_FILES["imagen_$prefix"]["tmp_name"]),
-                'id_estudiante' => $idEstudiante,
-                'created_by' => $usuario
-            ];
-            $idPersona = insertarPersona($conn, $personaData);
-            insertarRol($conn, $idPersona, $rol);
-        }
-
-        $conn->commit();
-
-        echo '<script>
-            Swal.fire({
-                title: "Éxito",
-                text: "Los datos se han guardado correctamente.",
-                icon: "success",
-                confirmButtonText: "Aceptar",
-                showCancelButton: false
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = "../administracion/estudiantes.php";
-                }
-            });
-        </script>';
+    public function __construct($pdo) {
+        $this->pdo = $pdo;
     }
-} catch (Exception $e) {
-    $conn->rollBack();
-    echo "Error: " . $e->getMessage();
-}
-$conn = null;
 
-function procesarImagen($imagePath) {
-    $originalImage = imagecreatefromstring(file_get_contents($imagePath));
-    $newImage = imagecreatetruecolor(148, 178);
-    imagecopyresampled($newImage, $originalImage, 0, 0, 0, 0, 148, 178, imagesx($originalImage), imagesy($originalImage));
-    ob_start();
-    imagejpeg($newImage, NULL, 100);
-    $newImageContent = ob_get_contents();
-    ob_end_clean();
-    imagedestroy($originalImage);
-    imagedestroy($newImage);
-    return $newImageContent;
-}
+    public function insertarMatricula($datosEstudiante, $datosMadre, $datosPadre) {
+        try {
+            $this->pdo->beginTransaction();
 
-function insertarEstudiante($conn, $data) {
-    $sql = "INSERT INTO estudiante (cedula, apellidos, nombres, lugar_nacimiento, residencia, direccion, sector, fecha_nacimiento, foto, codigo_unico, condicion, created_by)
-            VALUES (:cedula, :apellidos, :nombres, :lugar_nacimiento, :residencia, :direccion, :sector, :fecha_nacimiento, :foto, :codigo_unico, :condicion, :created_by)";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute($data);
-    return $conn->lastInsertId();
-}
+            // Insertar datos del estudiante
+            $sqlEstudiante = "INSERT INTO escuela.estudiantes (id_persona, paralelo, codigo_unico, condicion, tipo_discapacidad, porcentaje_discapacidad, carnet_discapacidad, imagen) 
+                              VALUES (:id_persona, :paralelo, :codigo_unico, :condicion, :tipo_discapacidad, :porcentaje_discapacidad, :carnet_discapacidad, :imagen)";
+            $stmtEstudiante = $this->pdo->prepare($sqlEstudiante);
+            $stmtEstudiante->execute($datosEstudiante);
 
-function insertarMatricula($conn, $data) {
-    $idPeriodo = $conn->query("SELECT id FROM periodo WHERE estado = 1")->fetch(PDO::FETCH_ASSOC)['id'];
-    $ultimoNumeroMatricula = $conn->query("SELECT MAX(numero) as ultimo_numero FROM matricula")->fetch(PDO::FETCH_ASSOC)['ultimo_numero'];
-    $nuevoNumeroMatricula = $ultimoNumeroMatricula + 1;
+            // Insertar datos de la madre
+            $sqlMadre = "INSERT INTO escuela.madres (id_persona, ocupacion, telefono, correo) 
+                         VALUES (:id_persona, :ocupacion, :telefono, :correo)";
+            $stmtMadre = $this->pdo->prepare($sqlMadre);
+            $stmtMadre->execute($datosMadre);
 
-    $sql = "INSERT INTO matricula (numero, id_estudiante, id_periodo, id_grado, id_paralelo)
-            VALUES (:numeroMatricula, :id_estudiante, :idPeriodo, :id_grado, :id_paralelo)";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute([
-        'numeroMatricula' => $nuevoNumeroMatricula,
-        'id_estudiante' => $data['id_estudiante'],
-        'idPeriodo' => $idPeriodo,
-        'id_grado' => $data['id_grado'],
-        'id_paralelo' => $data['id_paralelo']
-    ]);
+            // Insertar datos del padre
+            $sqlPadre = "INSERT INTO escuela.padres (id_persona, ocupacion, telefono, correo) 
+                         VALUES (:id_persona, :ocupacion, :telefono, :correo)";
+            $stmtPadre = $this->pdo->prepare($sqlPadre);
+            $stmtPadre->execute($datosPadre);
+
+            $this->pdo->commit();
+            return true;
+        } catch (Exception $e) {
+            $this->pdo->rollBack();
+            return false;
+        }
+    }
 }
 
-function insertarDiscapacidad($conn, $data) {
-    $sql = "INSERT INTO discapacidad (tipo, porcentaje, carnet, id_estudiante)
-            VALUES (:tipo, :porcentaje, :carnet, :id_estudiante)";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute($data);
-}
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $pdo = conectarBaseDeDatos();
+    $matricularEstudiante = new MatricularEstudiante($pdo);
 
-function insertarPersona($conn, $data) {
-    $sql = "INSERT INTO persona (cedula, apellidos_nombres, direccion, ocupacion, telefono, correo, foto, id_estudiante, created_by)
-            VALUES (:cedula, :apellidos_nombres, :direccion, :ocupacion, :telefono, :correo, :foto, :id_estudiante, :created_by)";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute($data);
-    return $conn->lastInsertId();
-}
+    // Manejar la carga de la imagen
+    $imagen = $_FILES['imagen']['name'];
+    $imagenTmp = $_FILES['imagen']['tmp_name'];
+    $imagenPath = __DIR__ . '/../../uploads/' . $imagen;
+    move_uploaded_file($imagenTmp, $imagenPath);
 
-function insertarRol($conn, $idPersona, $rol) {
-    $sql = "INSERT INTO rol (id_persona, rol) VALUES (:id_persona, :rol)";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute(['id_persona' => $idPersona, 'rol' => $rol]);
+    // Datos del estudiante
+    $datosEstudiante = [
+        ':id_persona' => $_POST['id_persona_estudiante'],
+        ':paralelo' => $_POST['id_paralelo_estudiante'],
+        ':codigo_unico' => $_POST['codigo_unico_estudiante'],
+        ':condicion' => $_POST['condicion_estudiante'],
+        ':tipo_discapacidad' => $_POST['tipo_discapacidad'],
+        ':porcentaje_discapacidad' => $_POST['porcentaje_discapacidad'],
+        ':carnet_discapacidad' => $_POST['carnet_discapacidad'],
+        ':imagen' => $imagen
+    ];
+
+    // Datos de la madre
+    $datosMadre = [
+        ':id_persona' => $_POST['id_persona_mama'],
+        ':ocupacion' => $_POST['ocupacion_mama'],
+        ':telefono' => $_POST['telefono_mama'],
+        ':correo' => $_POST['correo_mama']
+    ];
+
+    // Datos del padre
+    $datosPadre = [
+        ':id_persona' => $_POST['id_persona_papa'],
+        ':ocupacion' => $_POST['ocupacion_papa'],
+        ':telefono' => $_POST['telefono_papa'],
+        ':correo' => $_POST['correo_papa']
+    ];
+
+    if ($matricularEstudiante->insertarMatricula($datosEstudiante, $datosMadre, $datosPadre)) {
+        echo json_encode(['status' => 'success']);
+    } else {
+        echo json_encode(['status' => 'error']);
+    }
 }
 ?>

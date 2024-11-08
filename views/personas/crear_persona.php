@@ -1,7 +1,6 @@
 <?php
 include_once(__DIR__ . '/../../config/config.php');
 session_start();
-include_once(__DIR__ . '/../../config/conexion.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +13,7 @@ include_once(__DIR__ . '/../../config/conexion.php');
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Personas</title>
+    <title>Agregar Personas</title>
 
     <!-- Custom fonts for this template-->
     <link href="../../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -63,43 +62,43 @@ include_once(__DIR__ . '/../../config/conexion.php');
                             <div class="col-md-8">
                                 <div class="card shadow">
                                     <div class="card-body">
-                                        <form id="crearPersonaForm" onsubmit="return crearPersona(event)">
-                                            <div class="form-group">
-                                                <label for="cedula">Cédula:</label>
-                                                <input type="text" class="form-control" id="cedula" name="cedula" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="apellidos">Apellidos:</label>
-                                                <input type="text" class="form-control" id="apellidos" name="apellidos" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="nombres">Nombres:</label>
-                                                <input type="text" class="form-control" id="nombres" name="nombres" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="direccion">Dirección:</label>
-                                                <input type="text" class="form-control" id="direccion" name="direccion">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="telefono">Teléfono:</label>
-                                                <input type="text" class="form-control" id="telefono" name="telefono">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="correo">Correo:</label>
-                                                <input type="email" class="form-control" id="correo" name="correo">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="rol">Rol:</label>
-                                                <select class="form-control" id="rol" name="rol" required>
-                                                    <option value="estudiante">Estudiante</option>
-                                                    <option value="madre">Madre</option>
-                                                    <option value="padre">Padre</option>
-                                                    <option value="administrador">Administrador</option>
-                                                    <option value="etc.">Etc.</option>
-                                                </select>
-                                            </div>
-                                            <button type="submit" class="btn btn-primary">Crear Persona</button>
-                                        </form>
+                                    <form id="crearPersonaForm" onsubmit="return crearPersona(event)">
+                                        <div class="form-group">
+                                            <label for="cedula">Cédula:</label>
+                                            <input type="text" class="form-control" id="cedula" name="cedula" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="apellidos">Apellidos:</label>
+                                            <input type="text" class="form-control" id="apellidos" name="apellidos" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="nombres">Nombres:</label>
+                                            <input type="text" class="form-control" id="nombres" name="nombres" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="direccion">Dirección:</label>
+                                            <input type="text" class="form-control" id="direccion" name="direccion">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="telefono">Teléfono:</label>
+                                            <input type="text" class="form-control" id="telefono" name="telefono">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="correo">Correo:</label>
+                                            <input type="email" class="form-control" id="correo" name="correo">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="rol">Rol:</label>
+                                            <select class="form-control" id="rol" name="rol" required>
+                                                <option value="estudiante">Estudiante</option>
+                                                <option value="madre">Madre</option>
+                                                <option value="padre">Padre</option>
+                                                <option value="administrador">Administrador</option>
+                                                <option value="profesor">Profesor</option>
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Crear Persona</button>
+                                    </form>
                                     </div>
                                 </div>
                             </div>
@@ -116,7 +115,7 @@ include_once(__DIR__ . '/../../config/conexion.php');
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                    <span>&copy; Las Guilas del saber. Nos reservamos los derechos  </span>
+                    <span>&copy; Las Águilas del saber. Nos reservamos los derechos  </span>
                     </div>
                 </div>
             </footer>
@@ -154,24 +153,24 @@ include_once(__DIR__ . '/../../config/conexion.php');
     </div>
 
     <!-- Modal de éxito -->
-<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="successModalLabel">Éxito</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Persona creada exitosamente.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="location.reload()">Aceptar</button>
+    <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="successModalLabel">Éxito</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Persona creada exitosamente.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="location.reload()">Aceptar</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
     <!-- Bootstrap core JavaScript-->
     <script src="../../vendor/jquery/jquery.min.js"></script>
