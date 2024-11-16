@@ -121,3 +121,55 @@ WHERE schema_name = 'escuela';
 
 ALTER TABLE escuela.estudiantes
 DROP COLUMN grado;
+
+ALTER TABLE escuela.estudiantes
+ADD COLUMN imagen VARCHAR(255);
+
+CREATE TABLE escuela.periodos_lectivos (
+    id_periodo SERIAL PRIMARY KEY,
+    nombre_periodo VARCHAR(50) NOT NULL,
+    fecha_inicio DATE NOT NULL,
+    fecha_fin DATE NOT NULL
+);
+
+INSERT INTO escuela.periodos_lectivos (nombre_periodo, fecha_inicio, fecha_fin) VALUES
+('Periodo 2023-2024', '2023-09-01', '2024-06-30'),
+('Periodo 2024-2025', '2024-09-01', '2025-06-30');
+
+ALTER TABLE escuela.estudiantes
+ADD COLUMN id_periodo INT REFERENCES escuela.periodos_lectivos(id_periodo);
+
+-- Insertar datos del estudiante
+INSERT INTO escuela.estudiantes (
+    id_persona, paralelo, codigo_unico, condicion, tipo_discapacidad, 
+    porcentaje_discapacidad, carnet_discapacidad, imagen, id_periodo
+) VALUES (
+    1, 'A', '12345', 0, NULL, NULL, NULL, 'ejemplo.jpg', 1
+);
+
+-- Insertar datos de la madre
+INSERT INTO escuela.madres (
+    id_persona, ocupacion, telefono, correo
+) VALUES (
+    2, 'Profesora', '123456789', 'mama@example.com'
+);
+
+-- Insertar datos del padre
+INSERT INTO escuela.padres (
+    id_persona, ocupacion, telefono, correo
+) VALUES (
+    3, 'Ingeniero', '987654321', 'papa@example.com'
+);
+
+CREATE TABLE escuela.estudiantes (
+    id_estudiante SERIAL PRIMARY KEY,
+    id_persona INT NOT NULL,
+    paralelo VARCHAR NOT NULL,
+    codigo_unico VARCHAR NOT NULL,
+    condicion SMALLINT NOT NULL,
+    tipo_discapacidad VARCHAR,
+    porcentaje_discapacidad NUMERIC,
+    carnet_discapacidad VARCHAR,
+    imagen VARCHAR,
+    id_periodo INT NOT NULL
+);

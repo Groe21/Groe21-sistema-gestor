@@ -1,13 +1,22 @@
 <div class="container d-flex justify-content-center col-md-12">
-    <form id="matricularEstudianteForm" onsubmit="return matricularEstudiante(event)" enctype="multipart/form-data" class="col-md-12 p-4" style="border: 1px solid #ccc; background-color: #f9f9f9; border-radius: 8px;">
+    <form id="matricularEstudianteForm" action="<?php echo BASE_URL; ?>/models/estudiantes/matricular_estudiante.php" method="POST" enctype="multipart/form-data" class="col-md-12 p-4" style="border: 1px solid #ccc; background-color: #f9f9f9; border-radius: 8px;">
         
         <!-- Sección de Datos del Estudiante -->
         <div id="seccion-estudiante" class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h6 class="m-0 font-weight-bold text-primary">Datos del estudiante</h6>
+                <div class="form-group ml-3">
+                <div class="form-group">
+                    <label for="id_periodo">Periodo Lectivo</label>
+                    <?php echo $obtenerPeriodos->generarSelect(); ?>
+                </div>
+                </div>
+                <div>
                 <button type="button" class="btn btn-secondary btn-sm" onclick="abrirModal('estudiante')" style="background-color: #6c757d; border-color: #6c757d;">
                     <i class="fas fa-search"></i> Estudiante
                 </button>
+                </div>
+                
             </div>
             <div class="card-body">
             <table class="table table-bordered">
@@ -78,12 +87,10 @@
                 </tr>
                 <tr>
                 <td>
-                    <div class="form-group">
+                <div class="form-group">
                     <label for="id_paralelo_estudiante">Paralelo</label>
-                    <select class="form-control" id="id_paralelo_estudiante" name="id_paralelo_estudiante" required>
-                    <option value="" selected disabled>Seleccione un paralelo</option>
-                    </select>
-                    </div>
+                    <?php echo $obtenerParalelos->generarSelect(); ?>
+                </div>
                 </td>
                 <td>
                     <div class="form-group">

@@ -24,9 +24,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $personas = $buscarPersona->buscarPorRol($tipo);
 
     if ($personas) {
-        echo json_encode($personas);
+        foreach ($personas as $persona) {
+            echo '<tr>';
+            echo '<td>' . $persona['cedula'] . '</td>';
+            echo '<td>' . $persona['nombres'] . '</td>';
+            echo '<td>' . $persona['apellidos'] . '</td>';
+            echo '<td>' . $persona['direccion'] . '</td>';
+            echo '<td>' . $persona['correo'] . '</td>';
+            echo '<td><button type="button" class="btn btn-primary btn-sm" onclick="seleccionarPersona(' . $persona['id_persona'] . ', \'' . $persona['cedula'] . '\', \'' . $persona['nombres'] . '\', \'' . $persona['apellidos'] . '\', \'' . $persona['direccion'] . '\', \'' . $persona['correo'] . '\', \'' . $tipo . '\')">Seleccionar</button></td>';
+            echo '</tr>';
+        }
     } else {
-        echo json_encode(['error' => 'No se encontraron personas con el rol especificado']);
+        echo '<tr><td colspan="6">No se encontraron personas con el rol especificado</td></tr>';
     }
 }
 ?>
