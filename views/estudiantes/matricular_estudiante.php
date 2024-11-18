@@ -65,7 +65,7 @@ $obtenerPeriodos = new ObtenerPeriodos($pdo);
                 <!-- Fila de contenido -->
                 <div class="row">
 
-                <?php include_once(__DIR__ . '/formulario_matriculacion.php'); ?>
+                
 
                 </div>
             </div>

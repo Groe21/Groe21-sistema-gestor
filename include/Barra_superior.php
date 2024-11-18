@@ -1,6 +1,7 @@
 <?php
 include_once(__DIR__ . '/../config/config.php');
-include_once(__DIR__ . '/../config/conexion.php'); // Asegúrate de incluir el archivo de configuración
+include_once(__DIR__ . '/../config/conexion.php');
+include_once(__DIR__ . '/../models/periodos/obtener_periodos.php');
 if (!isset($_SESSION['usuario'])) {
     header('Location: ' . BASE_URL . '/login.php');
     exit();
@@ -12,6 +13,8 @@ if (isset($_GET['logout'])) {
     header('Location: ' . BASE_URL . '/login.php');
     exit();
 }
+$pdo = conectarBaseDeDatos();
+$obtenerPeriodos = new ObtenerPeriodos($pdo);
 ?>
 
 <nav class="navbar navbar-expand navbar-light bg-warning topbar mb-4 static-top shadow">
@@ -30,52 +33,11 @@ if (isset($_GET['logout'])) {
                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-search fa-fw"></i>
             </a>
-            <!-- Desplegable - Mensajes -->
-            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                 aria-labelledby="searchDropdown">
-                <form class="form-inline mr-auto w-100 navbar-search">
-                    <div class="input-group">
-                        <input type="text" class="form-control bg-light border-0 small"
-                               placeholder="Buscar..." aria-label="Buscar"
-                               aria-describedby="basic-addon2">
-                        <div class="input-group-append">
-                            <button class="btn btn-primary" type="button">
-                                <i class="fas fa-search fa-sm"></i>
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
         </li>
 
-        <!-- Elemento de navegación - Mensajes -->
-        <li class="nav-item dropdown no-arrow mx-1">
-            <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
-               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-envelope fa-fw"></i>
-                <!-- Contador - Mensajes -->
-                <span class="badge badge-danger badge-counter">7</span>
-            </a>
-            <!-- Desplegable - Mensajes -->
-            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                 aria-labelledby="messagesDropdown">
-                <h6 class="dropdown-header">
-                    Mensajería
-                </h6>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                    <div class="dropdown-list-image mr-3">
-                        <img class="rounded-circle" src="img/undraw_profile_1.svg" alt="...">
-                        <div class="status-indicator bg-success"></div>
-                    </div>
-                    <div class="font-weight-bold">
-                        <div class="text-truncate">¡Hola! Me pregunto si puedes ayudarme con un problema que he tenido.</div>
-                        <div class="small text-gray-500">Emily Fowler · 58m</div>
-                    </div>
-                </a>
-                <a class="dropdown-item text-center small text-gray-500" href="#">Todos los mensajes</a>
-            </div>
+        <li class="nav-item align-self-center">
+            <?php echo $obtenerPeriodos->generarSelect(); ?>
         </li>
-
         <div class="topbar-divider d-none d-sm-block"></div>
 
         <!-- Información del usuario -->
@@ -109,6 +71,10 @@ if (isset($_GET['logout'])) {
                     Registro de actividad
                 </a>
                 <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#crearPeriodoModal">
+                    <i class="fas fa-calendar-plus fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Crear Periodo
+                </a>
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                     Cerrar sesión
@@ -135,6 +101,38 @@ if (isset($_GET['logout'])) {
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
                 <a class="btn btn-primary" href="<?php echo BASE_URL; ?>/include/Barra_superior.php?logout=true">Cerrar sesión</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Crear Periodo -->
+<div class="modal fade" id="crearPeriodoModal" tabindex="-1" role="dialog" aria-labelledby="crearPeriodoModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="crearPeriodoModalLabel">Crear Nuevo Periodo</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="<?php echo BASE_URL; ?>/models/periodos/crear_periodo.php" method="POST">
+                    <div class="form-group">
+                        <label for="nombre_periodo">Nombre del Periodo:</label>
+                        <input type="text" class="form-control" id="nombre_periodo" name="nombre_periodo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fecha_inicio">Fecha de Inicio:</label>
+                        <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fecha_fin">Fecha de Fin:</label>
+                        <input type="date" class="form-control" id="fecha_fin" name="fecha_fin" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Crear Periodo</button>
+                </form>
             </div>
         </div>
     </div>
