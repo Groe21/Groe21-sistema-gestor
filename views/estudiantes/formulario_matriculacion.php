@@ -161,7 +161,7 @@
                 <input type="email" class="form-control" id="correo_representante" name="correo_representante" required>
             </div>
             <div class="form-group">
-                <label for="tipo_representante">Tipo de Representante:</label>
+                <label for="tipo_representante">Parentesco:</label>
                 <select class="form-control" id="tipo_representante" name="tipo_representante" required>
                     <option value="mama">Mamá</option>
                     <option value="papa">Papá</option>
