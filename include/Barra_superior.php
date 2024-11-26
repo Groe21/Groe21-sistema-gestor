@@ -1,7 +1,7 @@
 <?php
 include_once(__DIR__ . '/../config/config.php');
 include_once(__DIR__ . '/../config/conexion.php');
-include_once(__DIR__ . '/../models/periodos/obtener_periodos.php');
+
 if (!isset($_SESSION['usuario'])) {
     header('Location: ' . BASE_URL . '/login.php');
     exit();
@@ -14,7 +14,7 @@ if (isset($_GET['logout'])) {
     exit();
 }
 $pdo = conectarBaseDeDatos();
-$obtenerPeriodos = new ObtenerPeriodos($pdo);
+
 ?>
 
 <nav class="navbar navbar-expand navbar-light bg-warning topbar mb-4 static-top shadow">
@@ -33,10 +33,6 @@ $obtenerPeriodos = new ObtenerPeriodos($pdo);
                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-search fa-fw"></i>
             </a>
-        </li>
-
-        <li class="nav-item align-self-center">
-            <?php echo $obtenerPeriodos->generarSelect(); ?>
         </li>
         <div class="topbar-divider d-none d-sm-block"></div>
 

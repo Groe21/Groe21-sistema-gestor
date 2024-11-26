@@ -60,40 +60,20 @@ session_start();
                     <div class="col-lg-12 mx-auto">
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Buscar Persona</h6>
-                            </div>
-                            <div class="card-body">
-                                <form id="buscarPersonaForm">
-                                    <div class="form-group">
-                                        <label for="cedula">Cédula:</label>
-                                        <input type="text" class="form-control" id="cedula" name="cedula" required>
-                                        <button type="button" class="btn btn-primary mt-2" onclick="buscarPersona()">Buscar Persona</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-
-                        <div class="card shadow mb-4">
-                            <div class="card-header py-3">
                                 <h6 class="m-0 font-weight-bold text-primary">Crear Usuario</h6>
                             </div>
                             <div class="card-body">
-                                <form id="crearUsuarioForm" onsubmit="return crearUsuario(event)">
-                                    <input type="hidden" id="id_persona" name="id_persona" required>
-                                    <div class="form-group">
-                                        <label for="nombre_completo">Nombre:</label>
-                                        <input type="text" class="form-control" id="nombre_completo" name="nombre_completo" readonly required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="username">Usuario:</label>
-                                        <input type="text" class="form-control" id="username" name="username" readonly required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="password">Contraseña:</label>
-                                        <input type="password" class="form-control" id="password" name="password" required>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">Crear Usuario</button>
-                                </form>
+                            <form id="crearUsuarioForm" action="<?php echo BASE_URL; ?>/models/usuarios/insertar_usuario.php" method="POST" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <label for="username">Usuario:</label>
+                                    <input type="text" class="form-control" id="username" name="username" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">Contraseña:</label>
+                                    <input type="password" class="form-control" id="password" name="password" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Crear Usuario</button>
+                            </form>
                             </div>
                         </div>
                     </div>
@@ -184,50 +164,35 @@ session_start();
     <script src="../../js/demo/chart-pie-demo.js"></script>
 
     <script>
-    function buscarPersona() {
-        const cedula = document.getElementById('cedula').value;
+        document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('crearUsuarioForm');
 
-        fetch('<?php echo BASE_URL; ?>/models/personas/buscar_persona.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: `cedula=${cedula}`
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data); // Agregar este log para ver la respuesta
-            if (data.error) {
-                alert(data.error);
-            } else {
-                document.getElementById('id_persona').value = data.id_persona;
-                document.getElementById('username').value = data.cedula;
-                document.getElementById('nombre_completo').value = `${data.nombres} ${data.apellidos}`;
-            }
-        })
-        .catch(error => console.error('Error:', error));
-    }
+    form.addEventListener('submit', function(event) {
+        event.preventDefault(); // Evitar el envío del formulario por defecto
 
-    function crearUsuario(event) {
-        event.preventDefault();
-
-        const form = document.getElementById('crearUsuarioForm');
         const formData = new FormData(form);
 
-        fetch('<?php echo BASE_URL; ?>/models/usuarios/insertar_usuario.php', {
+        fetch(form.action, {
             method: 'POST',
-            body: new URLSearchParams(formData)
+            body: formData
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
+                // Mostrar el modal de éxito
                 $('#successModal').modal('show');
+                // Limpiar el formulario
+                form.reset();
             } else {
-                alert('Error al crear el usuario.');
+                alert('Error: ' + data.error);
             }
         })
-        .catch(error => console.error('Error:', error));
-    }
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Ocurrió un error al crear el usuario.');
+        });
+    });
+});
     </script>
 
 </body>

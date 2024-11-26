@@ -3,7 +3,7 @@
 <ul class="navbar-nav bg-gradient-danger sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Barra lateral - Marca -->
-    <a class="sidebar-brand d-flex flex-column align-items-center justify-content-center" href="../../principal.php" style="margin-bottom: 20px; margin-top: 20px;">
+    <a class="sidebar-brand d-flex flex-column align-items-center justify-content-center" href="<?php echo BASE_URL; ?>/principal.php" style="margin-bottom: 20px; margin-top: 20px;">
         <div class="sidebar-brand-icon" style="margin-bottom: 10px;">
             <img src="<?php echo BASE_URL; ?>/img/logo23.png" alt="Brand Image" style="width: 50px; height: 50px;">
         </div>
@@ -65,10 +65,9 @@
         <div id="collapseEscuela" class="collapse" aria-labelledby="headingEscuela" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Gestión de la Escuela:</h6>
-                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/escuela/gestionar_cursos.php">Cursos</a>
-                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/escuela/gestionar_profesores.php">Profesores</a>
-                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/personas/crear_persona.php">Agregar Nueva Persona</a>
-                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/personas/listado_personas.php">Listado de Personas</a>
+                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/escuela/gestionar_cursos.php">gestion de cursos</a>
+                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/escuela/gestionar_profesores.php">gestion de profesores</a>
+                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/asistencia/gestion_asistencia.php">gestion de asistencia</a>
             </div>
         </div>
     </li>
@@ -92,11 +91,11 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Gestión de Estudiantes:</h6>
                 <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/estudiantes/matricular_estudiante.php">Matricular Estudiante</a>
-                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/estudiantes/tabresponsable.php">Responsables</a>
-                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/estudiantes/estudiantes.php">Matriculados</a>
+                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/estudiantes/listado_estudiantes.php">Estudiantes Matriculados</a>
+                <!-- <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/estudiantes/estudiantes.php">Matriculados</a>
                 <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/estudiantes/listado_estudiantes.php">Listado Estudiantes</a>
                 <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/estudiantes/periodos_culminados.php">Períodos Culminados</a>
-                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/estudiantes/inactivos.php">Estudiantes Inactivos</a>
+                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/estudiantes/inactivos.php">Estudiantes Inactivos</a> -->
             </div>
         </div>
     </li>

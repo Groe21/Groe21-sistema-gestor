@@ -1,119 +1,82 @@
 <?php
 include_once(__DIR__ . '/../../config/conexion.php');
 
-class MatricularEstudiante {
-    private $pdo;
+function matricular_estudiante(
+    $cedula_estudiante, $apellidos_estudiante, $nombres_estudiante, $fecha_nacimiento_estudiante, $lugar_nacimiento_estudiante, $residencia_estudiante, $direccion_estudiante, $sector_estudiante, $foto_estudiante, $id_paralelo_estudiante, $id_periodo,
+    $cedula_padre, $apellidos_padre, $nombres_padre, $direccion_padre, $ocupacion_padre, $telefono_padre, $correo_padre, $foto_padre,
+    $cedula_madre, $apellidos_madre, $nombres_madre, $direccion_madre, $ocupacion_madre, $telefono_madre, $correo_madre, $foto_madre,
+    $cedula_representante, $apellidos_representante, $nombres_representante, $direccion_representante, $ocupacion_representante, $telefono_representante, $correo_representante, $tipo_representante, $foto_representante
+) {
+    $pdo = conectarBaseDeDatos();
 
-    public function __construct($pdo) {
-        $this->pdo = $pdo;
-    }
+    $sql = "SELECT matricular_estudiante(
+        :cedula_estudiante, :apellidos_estudiante, :nombres_estudiante, :fecha_nacimiento_estudiante, :lugar_nacimiento_estudiante, :residencia_estudiante, :direccion_estudiante, :sector_estudiante, :foto_estudiante, :id_paralelo_estudiante, :id_periodo,
+        :cedula_padre, :apellidos_padre, :nombres_padre, :direccion_padre, :ocupacion_padre, :telefono_padre, :correo_padre, :foto_padre,
+        :cedula_madre, :apellidos_madre, :nombres_madre, :direccion_madre, :ocupacion_madre, :telefono_madre, :correo_madre, :foto_madre,
+        :cedula_representante, :apellidos_representante, :nombres_representante, :direccion_representante, :ocupacion_representante, :telefono_representante, :correo_representante, :foto_representante, :tipo_representante
+    )";
 
-    public function insertarMatricula($datos) {
-        try {
-            $this->pdo->beginTransaction();
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+        ':cedula_estudiante' => $cedula_estudiante,
+        ':apellidos_estudiante' => $apellidos_estudiante,
+        ':nombres_estudiante' => $nombres_estudiante,
+        ':fecha_nacimiento_estudiante' => $fecha_nacimiento_estudiante,
+        ':lugar_nacimiento_estudiante' => $lugar_nacimiento_estudiante,
+        ':residencia_estudiante' => $residencia_estudiante,
+        ':direccion_estudiante' => $direccion_estudiante,
+        ':sector_estudiante' => $sector_estudiante,
+        ':foto_estudiante' => $foto_estudiante,
+        ':id_paralelo_estudiante' => $id_paralelo_estudiante,
+        ':id_periodo' => $id_periodo,
+        ':cedula_padre' => $cedula_padre,
+        ':apellidos_padre' => $apellidos_padre,
+        ':nombres_padre' => $nombres_padre,
+        ':direccion_padre' => $direccion_padre,
+        ':ocupacion_padre' => $ocupacion_padre,
+        ':telefono_padre' => $telefono_padre,
+        ':correo_padre' => $correo_padre,
+        ':foto_padre' => $foto_padre,
+        ':cedula_madre' => $cedula_madre,
+        ':apellidos_madre' => $apellidos_madre,
+        ':nombres_madre' => $nombres_madre,
+        ':direccion_madre' => $direccion_madre,
+        ':ocupacion_madre' => $ocupacion_madre,
+        ':telefono_madre' => $telefono_madre,
+        ':correo_madre' => $correo_madre,
+        ':foto_madre' => $foto_madre,
+        ':cedula_representante' => $cedula_representante,
+        ':apellidos_representante' => $apellidos_representante,
+        ':nombres_representante' => $nombres_representante,
+        ':direccion_representante' => $direccion_representante,
+        ':ocupacion_representante' => $ocupacion_representante,
+        ':telefono_representante' => $telefono_representante,
+        ':correo_representante' => $correo_representante,
+        ':foto_representante' => $foto_representante,
+        ':tipo_representante' => $tipo_representante
+    ]);
 
-            // Insertar datos del estudiante
-            $sqlEstudiante = "INSERT INTO escuela.estudiantes (
-                id_persona, paralelo, codigo_unico, condicion, tipo_discapacidad, 
-                porcentaje_discapacidad, carnet_discapacidad, imagen, id_periodo
-            ) VALUES (
-                :id_persona, :paralelo, :codigo_unico, :condicion, :tipo_discapacidad, 
-                :porcentaje_discapacidad, :carnet_discapacidad, :imagen, :id_periodo
-            )";
-            $stmtEstudiante = $this->pdo->prepare($sqlEstudiante);
-            $stmtEstudiante->execute([
-                ':id_persona' => $datos[':id_persona'],
-                ':paralelo' => $datos[':paralelo'],
-                ':codigo_unico' => $datos[':codigo_unico'],
-                ':condicion' => $datos[':condicion'],
-                ':tipo_discapacidad' => $datos[':tipo_discapacidad'],
-                ':porcentaje_discapacidad' => $datos[':porcentaje_discapacidad'],
-                ':carnet_discapacidad' => $datos[':carnet_discapacidad'],
-                ':imagen' => $datos[':imagen'],
-                ':id_periodo' => $datos[':id_periodo']
-            ]);
-
-            // Insertar datos de la madre
-            $sqlMadre = "INSERT INTO escuela.madres (
-                id_persona, ocupacion, telefono, correo
-            ) VALUES (
-                :id_persona_mama, :ocupacion_mama, :telefono_mama, :correo_mama
-            )";
-            $stmtMadre = $this->pdo->prepare($sqlMadre);
-            $stmtMadre->execute([
-                ':id_persona_mama' => $datos[':id_persona_mama'],
-                ':ocupacion_mama' => $datos[':ocupacion_mama'],
-                ':telefono_mama' => $datos[':telefono_mama'],
-                ':correo_mama' => $datos[':correo_mama']
-            ]);
-
-            // Insertar datos del padre
-            $sqlPadre = "INSERT INTO escuela.padres (
-                id_persona, ocupacion, telefono, correo
-            ) VALUES (
-                :id_persona_papa, :ocupacion_papa, :telefono_papa, :correo_papa
-            )";
-            $stmtPadre = $this->pdo->prepare($sqlPadre);
-            $stmtPadre->execute([
-                ':id_persona_papa' => $datos[':id_persona_papa'],
-                ':ocupacion_papa' => $datos[':ocupacion_papa'],
-                ':telefono_papa' => $datos[':telefono_papa'],
-                ':correo_papa' => $datos[':correo_papa']
-            ]);
-
-            $this->pdo->commit();
-            return true;
-        } catch (Exception $e) {
-            $this->pdo->rollBack();
-            error_log($e->getMessage()); // Log the error message
-            return false;
-        }
-    }
+    echo json_encode(['success' => true]);
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $pdo = conectarBaseDeDatos();
-    $matricularEstudiante = new MatricularEstudiante($pdo);
+    // Manejar la subida de archivos
+    $foto_estudiante = $_FILES['foto_estudiante']['name'];
+    $foto_padre = $_FILES['foto_padre']['name'];
+    $foto_madre = $_FILES['foto_madre']['name'];
+    $foto_representante = $_FILES['foto_representante']['name'];
 
-    // Manejar la carga de la imagen
-    $imagen = $_FILES['imagen']['name'];
-    $imagenTmp = $_FILES['imagen']['tmp_name'];
-    $imagenPath = __DIR__ . '/../../uploads/' . $imagen;
+    // Mover los archivos subidos a la carpeta de destino
+    move_uploaded_file($_FILES['foto_estudiante']['tmp_name'], __DIR__ . '/../../uploads/fotos_persona/' . $foto_estudiante);
+    move_uploaded_file($_FILES['foto_padre']['tmp_name'], __DIR__ . '/../../uploads/fotos_persona/' . $foto_padre);
+    move_uploaded_file($_FILES['foto_madre']['tmp_name'], __DIR__ . '/../../uploads/fotos_persona/' . $foto_madre);
+    move_uploaded_file($_FILES['foto_representante']['tmp_name'], __DIR__ . '/../../uploads/fotos_persona/' . $foto_representante);
 
-    // Verificar si la carpeta uploads existe, si no, crearla
-    if (!file_exists(__DIR__ . '/../../uploads')) {
-        mkdir(__DIR__ . '/../../uploads', 0777, true);
-    }
-
-    if (move_uploaded_file($imagenTmp, $imagenPath)) {
-        // Datos para la inserción
-        $datos = [
-            ':id_persona' => $_POST['id_persona_estudiante'],
-            ':paralelo' => $_POST['id_paralelo_estudiante'],
-            ':codigo_unico' => $_POST['codigo_unico_estudiante'],
-            ':condicion' => $_POST['condicion_estudiante'],
-            ':tipo_discapacidad' => isset($_POST['tipo_discapacidad']) ? $_POST['tipo_discapacidad'] : null,
-            ':porcentaje_discapacidad' => isset($_POST['porcentaje_discapacidad']) ? $_POST['porcentaje_discapacidad'] : null,
-            ':carnet_discapacidad' => isset($_POST['carnet_discapacidad']) ? $_POST['carnet_discapacidad'] : null,
-            ':imagen' => $imagen,
-            ':id_periodo' => $_POST['id_periodo'],
-            ':id_persona_mama' => $_POST['id_persona_mama'],
-            ':ocupacion_mama' => $_POST['ocupacion_mama'],
-            ':telefono_mama' => $_POST['telefono_mama'],
-            ':correo_mama' => $_POST['correo_mama'],
-            ':id_persona_papa' => $_POST['id_persona_papa'],
-            ':ocupacion_papa' => $_POST['ocupacion_papa'],
-            ':telefono_papa' => $_POST['telefono_papa'],
-            ':correo_papa' => $_POST['correo_papa']
-        ];
-
-        if ($matricularEstudiante->insertarMatricula($datos)) {
-            echo json_encode(['status' => 'success']);
-        } else {
-            echo json_encode(['status' => 'error', 'message' => 'Error al insertar la matrícula']);
-        }
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Error al subir la imagen']);
-    }
+    matricular_estudiante(
+        $_POST['cedula_estudiante'], $_POST['apellidos_estudiante'], $_POST['nombres_estudiante'], $_POST['fecha_nacimiento_estudiante'], $_POST['lugar_nacimiento_estudiante'], $_POST['residencia_estudiante'], $_POST['direccion_estudiante'], $_POST['sector_estudiante'], $foto_estudiante, $_POST['id_paralelo_estudiante'], $_POST['id_periodo'],
+        $_POST['cedula_padre'], $_POST['apellidos_padre'], $_POST['nombres_padre'], $_POST['direccion_padre'], $_POST['ocupacion_padre'], $_POST['telefono_padre'], $_POST['correo_padre'], $foto_padre,
+        $_POST['cedula_madre'], $_POST['apellidos_madre'], $_POST['nombres_madre'], $_POST['direccion_madre'], $_POST['ocupacion_madre'], $_POST['telefono_madre'], $_POST['correo_madre'], $foto_madre,
+        $_POST['cedula_representante'], $_POST['apellidos_representante'], $_POST['nombres_representante'], $_POST['direccion_representante'], $_POST['ocupacion_representante'], $_POST['telefono_representante'], $_POST['correo_representante'], $_POST['tipo_representante'], $foto_representante
+    );
 }
 ?>

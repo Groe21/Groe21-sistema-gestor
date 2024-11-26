@@ -4,9 +4,17 @@ ob_start();
 include_once(__DIR__ . '/../../config/config.php');
 include_once(__DIR__ . '/../../models/escuela/obtener_paralelos.php');
 include_once(__DIR__ . '/../../models/periodos/obtener_periodos.php');
+include_once(__DIR__ . '/../../models/estudiantes/buscar_estudiante.php');
 $pdo = conectarBaseDeDatos();
 $obtenerParalelos = new ObtenerParalelos($pdo);
 $obtenerPeriodos = new ObtenerPeriodos($pdo);
+$buscarPersona = new BuscarPersona($pdo);
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $tipo_persona = $_POST['tipo_persona'];
+    $id_periodo = $_POST['id_periodo'];
+    echo $buscarPersona->generarTablaPersonas($tipo_persona, $id_periodo);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,14 +31,10 @@ $obtenerPeriodos = new ObtenerPeriodos($pdo);
 
     <!-- Custom fonts for this template-->
     <link href="../../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     <!-- Custom styles for this template-->
     <link href="../../css/sb-admin-2.min.css" rel="stylesheet">
-   
-
     <link rel="icon" href="../../img/logo23.ico" type="image/x-icon">
 
 </head>
@@ -49,27 +53,27 @@ $obtenerPeriodos = new ObtenerPeriodos($pdo);
 
             <!-- Contenido principal -->
             <div id="content">
- 
-            <!-- Barra superior -->
-            <?php include_once (__DIR__ . '/../../include/barra_superior.php'); ?>
-            <!-- Fin de la barra superior -->
 
-            <!-- Comienzo del contenido de la página -->
-            <div class="container-fluid">
+                <!-- Barra superior -->
+                <?php include_once(__DIR__ . '/../../include/barra_superior.php'); ?>
+                <!-- Fin de la barra superior -->
 
-                <!-- Encabezado de la página -->
-                <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 class="h3 mb-0 text-gray-800">Matricular Estudiante</h1>
+                <!-- Comienzo del contenido de la página -->
+                <div class="container-fluid">
+
+                    <!-- Encabezado de la página -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Matricular Estudiante</h1>
+                    </div>
+
+                    <!-- Fila de contenido -->
+                    <div class="row">
+                        <div class="container mt-5">
+                            <?php include_once(__DIR__ . '/formulario_matriculacion.php'); ?>
+                        </div>
+                    </div>
                 </div>
-
-                <!-- Fila de contenido -->
-                <div class="row">
-
-                
-
-                </div>
-            </div>
-            <!-- /.contenedor-fluido -->
+                <!-- /.contenedor-fluido -->
 
             </div>
             <!-- Fin del contenido principal -->
@@ -78,7 +82,7 @@ $obtenerPeriodos = new ObtenerPeriodos($pdo);
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                    <span>&copy; Las Águilas del saber. Nos reservamos los derechos  </span>
+                        <span>&copy; Las Águilas del saber. Nos reservamos los derechos</span>
                     </div>
                 </div>
             </footer>
@@ -87,8 +91,8 @@ $obtenerPeriodos = new ObtenerPeriodos($pdo);
         </div>
         <!-- Fin del contenedor de contenido -->
 
-        </div>
-        <!-- Fin del contenedor de la página -->
+    </div>
+    <!-- Fin del contenedor de la página -->
 
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
@@ -96,8 +100,7 @@ $obtenerPeriodos = new ObtenerPeriodos($pdo);
     </a>
 
     <!-- Modal de Cierre de Sesión-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -115,105 +118,73 @@ $obtenerPeriodos = new ObtenerPeriodos($pdo);
         </div>
     </div>
 
-    <!-- Modal de búsqueda -->
-    <div class="modal fade" id="modalBusqueda" tabindex="-1" role="dialog" aria-labelledby="modalBusquedaLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document"> <!-- Ajuste de tamaño del modal -->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalTitulo">Buscar Persona</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" id="modalTipo" name="tipo">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Cédula</th>
-                                <th>Nombres</th>
-                                <th>Apellidos</th>
-                                <th>Dirección</th>
-                                <th>Correo</th>
-                                <th>Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tablaResultados">
-                            <!-- Resultados de la búsqueda se insertarán aquí -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+    <!-- Modal de Éxito -->
+    <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="successModalLabel">Matriculación Exitosa</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            El estudiante ha sido matriculado exitosamente.
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="location.reload();">Cerrar</button>
+        </div>
         </div>
     </div>
+    </div>
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="../../vendor/jquery/jquery.min.js"></script>
-    <script src="../../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Core plugin JavaScript-->
-    <script src="../../vendor/jquery-easing/jquery.easing.min.js"></script>
+<!-- Bootstrap core JavaScript-->
+<script src="../../vendor/jquery/jquery.min.js"></script>
+<script src="../../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Custom scripts for all pages-->
-    <script src="../../js/sb-admin-2.min.js"></script>
-    <script src="../../js/discapacidad.js"></script>
+<!-- Core plugin JavaScript-->
+<script src="../../vendor/jquery-easing/jquery.easing.min.js"></script>
 
-    <!-- Page level plugins -->
-    <script src="../../vendor/chart.js/Chart.min.js"></script>
+<!-- Custom scripts for all pages-->
+<script src="../../js/sb-admin-2.min.js"></script>
+<script src="../../js/discapacidad.js"></script>
 
-    <!-- Page level custom scripts -->
-    <script src="../../js/demo/chart-area-demo.js"></script>
-    <script src="../../js/demo/chart-pie-demo.js"></script>
+<!-- Page level plugins -->
+<script src="../../vendor/chart.js/Chart.min.js"></script>
 
-    <script src="../../js/perfil_img.js"></script>
+<!-- Page level custom scripts -->
+<script src="../../js/demo/chart-area-demo.js"></script>
+<script src="../../js/demo/chart-pie-demo.js"></script>
 
 
 <script>
-    function abrirModal(tipo) {
-        $('#modalBusqueda').modal('show');
-        document.getElementById('modalTitulo').innerText = `Buscar ${tipo.charAt(0).toUpperCase() + tipo.slice(1)}`;
-        document.getElementById('modalTipo').value = tipo;
-        buscarEnModal(tipo); // Realizar la búsqueda inicial para mostrar todos los registros del tipo
-    }
-
-    function buscarEnModal(tipo) {
-        const formData = new FormData();
-        formData.append('tipo', tipo);
-
-        fetch('<?php echo BASE_URL; ?>/models/estudiantes/buscar_estudiante.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('tablaResultados').innerHTML = data;
-        })
-        .catch(error => console.error('Error:', error));
-    }
-
-    function seleccionarPersona(id_persona, cedula, nombres, apellidos, direccion, correo, tipo) {
-        if (tipo === 'estudiante') {
-            document.getElementById('id_persona_estudiante').value = id_persona;
-            document.getElementById('cedula_estudiante').value = cedula;
-            document.getElementById('apellidos_estudiante').value = apellidos;
-            document.getElementById('nombres_estudiante').value = nombres;
-            document.getElementById('direccion_estudiante').value = direccion;
-        } else if (tipo === 'madre') {
-            document.getElementById('id_persona_mama').value = id_persona;
-            document.getElementById('cedula_mama').value = cedula;
-            document.getElementById('apellidos_nombres_mama').value = `${nombres} ${apellidos}`;
-            document.getElementById('direccion_mama').value = direccion;
-        } else if (tipo === 'padre') {
-            document.getElementById('id_persona_papa').value = id_persona;
-            document.getElementById('cedula_papa').value = cedula;
-            document.getElementById('apellidos_nombres_papa').value = `${nombres} ${apellidos}`;
-            document.getElementById('direccion_papa').value = direccion;
-        }
-        $('#modalBusqueda').modal('hide');
-    }
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('matricularEstudianteForm');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(form);
+            
+            fetch(form.action, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    $('#successModal').modal('show');
+                } else {
+                    alert('Error al matricular al estudiante.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al matricular al estudiante.');
+            });
+        });
+    });
 </script>
- 
-
 
 <?php ob_end_flush(); ?>
 </body>

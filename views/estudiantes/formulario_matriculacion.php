@@ -1,255 +1,182 @@
-<div class="container d-flex justify-content-center col-md-12">
-    <form id="matricularEstudianteForm" action="<?php echo BASE_URL; ?>/models/estudiantes/matricular_estudiante.php" method="POST" enctype="multipart/form-data" class="col-md-12 p-4" style="border: 1px solid #ccc; background-color: #f9f9f9; border-radius: 8px;">
-        
-        <!-- Sección de Datos del Estudiante -->
-        <div id="seccion-estudiante" class="card mb-4">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h6 class="m-0 font-weight-bold text-primary">Datos del estudiante</h6>
-                <div class="form-group ml-3">
-                <div class="form-group">
-                    <label for="id_periodo">Periodo Lectivo</label>
-                    <?php echo $obtenerPeriodos->generarSelect(); ?>
-                </div>
-                </div>
-                <div>
-                <button type="button" class="btn btn-secondary btn-sm" onclick="abrirModal('estudiante')" style="background-color: #6c757d; border-color: #6c757d;">
-                    <i class="fas fa-search"></i> Estudiante
-                </button>
-                </div>
-                
+<form id="matricularEstudianteForm" action="<?php echo BASE_URL; ?>/models/estudiantes/matricular_estudiante.php" method="POST" enctype="multipart/form-data">
+    <!-- Datos del Estudiante -->
+    <div class="card mb-4">
+        <div class="card-header">Datos del Estudiante</div>
+        <div class="card-body">
+            <div class="form-group">
+                <label for="id_periodo">Periodo:</label>
+                <?php echo $obtenerPeriodos->generarSelect(); ?>
             </div>
-            <div class="card-body">
-            <table class="table table-bordered">
-                <tr>
-                <td rowspan="7" style="text-align: center; width: 20%;">
-                    <div class="form-group">
-                    <label for="imagen">Foto</label>
-                    <input type="file" class="form-control" id="imagen" name="imagen" required onchange="previewImage(event)">
-                    <img id="preview" src="#" alt="Vista previa de la imagen" style="display: none; margin-top: 10px; max-width: 100%; border-radius: 50%;">
-                    <button type="button" class="btn btn-primary btn-block mt-2" onclick="document.getElementById('imagen').click()">Agregar Foto</button>
-                    </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                    <label for="cedula_estudiante">Cédula</label>
-                    <input type="text" class="form-control" id="cedula_estudiante" name="cedula_estudiante" required onblur="buscarPersona(this.value, 'estudiante')">
-                    <input type="hidden" id="id_persona_estudiante" name="id_persona_estudiante">
-                    </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                    <label for="apellidos_estudiante">Apellidos</label>
-                    <input type="text" class="form-control" id="apellidos_estudiante" name="apellidos_estudiante" required>
-                    </div>
-                </td>
-                </tr>
-                <tr>
-                <td>
-                    <div class="form-group">
-                    <label for="nombres_estudiante">Nombres</label>
-                    <input type="text" class="form-control" id="nombres_estudiante" name="nombres_estudiante" required>
-                    </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                    <label for="lugar_nacimiento_estudiante">Lugar de Nacimiento</label>
-                    <input type="text" class="form-control" id="lugar_nacimiento_estudiante" name="lugar_nacimiento_estudiante" required>
-                    </div>
-                </td>
-                </tr>
-                <tr>
-                <td>
-                    <div class="form-group">
-                    <label for="residencia_estudiante">Residencia</label>
-                    <input type="text" class="form-control" id="residencia_estudiante" name="residencia_estudiante" required>
-                    </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                    <label for="direccion_estudiante">Dirección</label>
-                    <input type="text" class="form-control" id="direccion_estudiante" name="direccion_estudiante" required>
-                    </div>
-                </td>
-                </tr>
-                <tr>
-                <td>
-                    <div class="form-group">
-                    <label for="sector_estudiante">Sector</label>
-                    <input type="text" class="form-control" id="sector_estudiante" name="sector_estudiante" required>
-                    </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                    <label for="fecha_nacimiento_estudiante">Fecha de Nacimiento</label>
-                    <input type="date" class="form-control" id="fecha_nacimiento_estudiante" name="fecha_nacimiento_estudiante" required>
-                    </div>
-                </td>
-                </tr>
-                <tr>
-                <td>
-                <div class="form-group">
-                    <label for="id_paralelo_estudiante">Paralelo</label>
-                    <?php echo $obtenerParalelos->generarSelect(); ?>
-                </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                    <label for="codigo_unico_estudiante">Código Único</label>
-                    <input type="text" class="form-control" id="codigo_unico_estudiante" name="codigo_unico_estudiante" required>
-                    </div>
-                </td>
-                </tr>
-                <tr>
-                <td>
-                    <div class="form-group">
-                    <label for="condicion_estudiante">Condición</label>
-                    <select class="form-control" id="condicion_estudiante" name="condicion_estudiante" required onchange="toggleDiscapacidad(this.value)">
-                    <option value="" selected disabled>Seleccionar</option>
-                    <option value="1">Con Discapacidad</option>
-                    <option value="0">Sin Discapacidad</option>
-                    </select>
-                    </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                    <label for="tipo_discapacidad">Tipo de Discapacidad</label>
-                    <input type="text" class="form-control" id="tipo_discapacidad" name="tipo_discapacidad" disabled>
-                    </div>
-                </td>
-                </tr>
-                <tr>
-                <td>
-                    <div class="form-group">
-                    <label for="porcentaje_discapacidad">Porcentaje de Discapacidad</label>
-                    <input type="text" class="form-control" id="porcentaje_discapacidad" name="porcentaje_discapacidad" disabled>
-                    </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                    <label for="carnet_discapacidad">N° Carnet de Discapacidad</label>
-                    <input type="text" class="form-control" id="carnet_discapacidad" name="carnet_discapacidad" disabled>
-                    </div>
-                </td>
-                </tr>
-            </table>
+            <div class="form-group">
+                <label for="cedula_estudiante">Cédula:</label>
+                <input type="text" class="form-control" id="cedula_estudiante" name="cedula_estudiante" required>
+            </div>
+            <div class="form-group">
+                <label for="apellidos_estudiante">Apellidos:</label>
+                <input type="text" class="form-control" id="apellidos_estudiante" name="apellidos_estudiante" required>
+            </div>
+            <div class="form-group">
+                <label for="nombres_estudiante">Nombres:</label>
+                <input type="text" class="form-control" id="nombres_estudiante" name="nombres_estudiante" required>
+            </div>
+            <div class="form-group">
+                <label for="fecha_nacimiento_estudiante">Fecha de Nacimiento:</label>
+                <input type="date" class="form-control" id="fecha_nacimiento_estudiante" name="fecha_nacimiento_estudiante" required>
+            </div>
+            <div class="form-group">
+                <label for="lugar_nacimiento_estudiante">Lugar de Nacimiento:</label>
+                <input type="text" class="form-control" id="lugar_nacimiento_estudiante" name="lugar_nacimiento_estudiante" required>
+            </div>
+            <div class="form-group">
+                <label for="residencia_estudiante">Residencia:</label>
+                <input type="text" class="form-control" id="residencia_estudiante" name="residencia_estudiante" required>
+            </div>
+            <div class="form-group">
+                <label for="direccion_estudiante">Dirección:</label>
+                <input type="text" class="form-control" id="direccion_estudiante" name="direccion_estudiante" required>
+            </div>
+            <div class="form-group">
+                <label for="sector_estudiante">Sector:</label>
+                <input type="text" class="form-control" id="sector_estudiante" name="sector_estudiante" required>
+            </div>
+            <div class="form-group">
+                <label for="id_paralelo_estudiante">Paralelo:</label>
+                <?php echo $obtenerParalelos->generarSelect(); ?>
+            </div>
+            <div class="form-group">
+                <label for="foto_estudiante">Foto:</label>
+                <input type="file" class="form-control" id="foto_estudiante" name="foto_estudiante">
             </div>
         </div>
+    </div>
 
-        <!-- Sección de Datos de la Madre -->
-        <div id="seccion-mama" class="card mb-4">
-            <div class="card-header d-flex justify-content-between align-items-center">
-            <h6 class="m-0 font-weight-bold text-primary">Datos de la Madre</h6>
-            <button type="button" class="btn btn-secondary btn-sm" onclick="abrirModal('madre')" style="background-color: #6c757d; border-color: #6c757d;">
-                <i class="fas fa-search"></i> Madre
-            </button>
+    <!-- Datos del Padre -->
+    <div class="card mb-4">
+        <div class="card-header">Datos del Padre</div>
+        <div class="card-body">
+            <div class="form-group">
+                <label for="cedula_padre">Cédula:</label>
+                <input type="text" class="form-control" id="cedula_padre" name="cedula_padre" required>
             </div>
-            <div class="card-body">
-            <table class="table table-bordered">
-                <tr>
-
-                <td>
-                    <div class="form-group">
-                    <label for="cedula_mama">Cédula de la Madre</label>
-                    <input type="text" class="form-control" id="cedula_mama" name="cedula_mama" required onblur="buscarPersona(this.value, 'madre')">
-                    <input type="hidden" id="id_persona_mama" name="id_persona_mama">
-                    </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                    <label for="apellidos_nombres_mama">Apellidos y Nombres de la Madre</label>
-                    <input type="text" class="form-control" id="apellidos_nombres_mama" name="apellidos_nombres_mama" required>
-                    </div>
-                </td>
-                </tr>
-                <tr>
-                <td>
-                    <div class="form-group">
-                    <label for="direccion_mama">Dirección de la Madre</label>
-                    <input type="text" class="form-control" id="direccion_mama" name="direccion_mama" required>
-                    </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                    <label for="ocupacion_mama">Ocupación de la Madre</label>
-                    <input type="text" class="form-control" id="ocupacion_mama" name="ocupacion_mama" required>
-                    </div>
-                </td>
-                </tr>
-                <tr>
-                <td>
-                    <div class="form-group">
-                    <label for="telefono_mama">Teléfono de la Madre</label>
-                    <input type="text" class="form-control" id="telefono_mama" name="telefono_mama" required>
-                    </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                    <label for="correo_mama">Correo de la Madre</label>
-                    <input type="email" class="form-control" id="correo_mama" name="correo_mama" required>
-                    </div>
-                </td>
-                </tr>
-            </table>
+            <div class="form-group">
+                <label for="apellidos_padre">Apellidos:</label>
+                <input type="text" class="form-control" id="apellidos_padre" name="apellidos_padre" required>
+            </div>
+            <div class="form-group">
+                <label for="nombres_padre">Nombres:</label>
+                <input type="text" class="form-control" id="nombres_padre" name="nombres_padre" required>
+            </div>
+            <div class="form-group">
+                <label for="direccion_padre">Dirección:</label>
+                <input type="text" class="form-control" id="direccion_padre" name="direccion_padre" required>
+            </div>
+            <div class="form-group">
+                <label for="ocupacion_padre">Ocupación/Profesión:</label>
+                <input type="text" class="form-control" id="ocupacion_padre" name="ocupacion_padre" required>
+            </div>
+            <div class="form-group">
+                <label for="telefono_padre">Teléfono/Celular:</label>
+                <input type="text" class="form-control" id="telefono_padre" name="telefono_padre" required>
+            </div>
+            <div class="form-group">
+                <label for="correo_padre">Email:</label>
+                <input type="email" class="form-control" id="correo_padre" name="correo_padre" required>
+            </div>
+            <div class="form-group">
+                <label for="foto_padre">Foto:</label>
+                <input type="file" class="form-control" id="foto_padre" name="foto_padre">
             </div>
         </div>
+    </div>
 
-        <!-- Sección de Datos del Padre -->
-        <div id="seccion-papa" class="card mb-4">
-            <div class="card-header d-flex justify-content-between align-items-center">
-            <h6 class="m-0 font-weight-bold text-primary">Datos del Padre</h6>
-            <button type="button" class="btn btn-secondary btn-sm" onclick="abrirModal('padre')" style="background-color: #6c757d; border-color: #6c757d;">
-                <i class="fas fa-search"></i> Padre
-            </button>
+    <!-- Datos de la Madre -->
+    <div class="card mb-4">
+        <div class="card-header">Datos de la Madre</div>
+        <div class="card-body">
+            <div class="form-group">
+                <label for="cedula_madre">Cédula:</label>
+                <input type="text" class="form-control" id="cedula_madre" name="cedula_madre" required>
             </div>
-            <div class="card-body">
-            <table class="table table-bordered">
-                <tr>
-                <td>
-                    <div class="form-group">
-                    <label for="cedula_papa">Cédula del Padre</label>
-                    <input type="text" class="form-control" id="cedula_papa" name="cedula_papa" required onblur="buscarPersona(this.value, 'padre')">
-                    <input type="hidden" id="id_persona_papa" name="id_persona_papa">
-                    </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                    <label for="apellidos_nombres_papa">Apellidos y Nombres del Padre</label>
-                    <input type="text" class="form-control" id="apellidos_nombres_papa" name="apellidos_nombres_papa" required>
-                    </div>
-                </td>
-                </tr>
-                <tr>
-                <td>
-                    <div class="form-group">
-                    <label for="direccion_papa">Dirección del Padre</label>
-                    <input type="text" class="form-control" id="direccion_papa" name="direccion_papa" required>
-                    </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                    <label for="ocupacion_papa">Ocupación del Padre</label>
-                    <input type="text" class="form-control" id="ocupacion_papa" name="ocupacion_papa" required>
-                    </div>
-                </td>
-                </tr>
-                <tr>
-                <td>
-                    <div class="form-group">
-                    <label for="telefono_papa">Teléfono del Padre</label>
-                    <input type="text" class="form-control" id="telefono_papa" name="telefono_papa" required>
-                    </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                    <label for="correo_papa">Correo del Padre</label>
-                    <input type="email" class="form-control" id="correo_papa" name="correo_papa" required>
-                    </div>
-                </td>
-                </tr>
-            </table>
+            <div class="form-group">
+                <label for="apellidos_madre">Apellidos:</label>
+                <input type="text" class="form-control" id="apellidos_madre" name="apellidos_madre" required>
+            </div>
+            <div class="form-group">
+                <label for="nombres_madre">Nombres:</label>
+                <input type="text" class="form-control" id="nombres_madre" name="nombres_madre" required>
+            </div>
+            <div class="form-group">
+                <label for="direccion_madre">Dirección:</label>
+                <input type="text" class="form-control" id="direccion_madre" name="direccion_madre" required>
+            </div>
+            <div class="form-group">
+                <label for="ocupacion_madre">Ocupación/Profesión:</label>
+                <input type="text" class="form-control" id="ocupacion_madre" name="ocupacion_madre" required>
+            </div>
+            <div class="form-group">
+                <label for="telefono_madre">Teléfono/Celular:</label>
+                <input type="text" class="form-control" id="telefono_madre" name="telefono_madre" required>
+            </div>
+            <div class="form-group">
+                <label for="correo_madre">Email:</label>
+                <input type="email" class="form-control" id="correo_madre" name="correo_madre" required>
+            </div>
+            <div class="form-group">
+                <label for="foto_madre">Foto:</label>
+                <input type="file" class="form-control" id="foto_madre" name="foto_madre">
             </div>
         </div>
+    </div>
 
-        <button type="submit" class="btn btn-primary">Matricular Estudiante</button>
-    </form>
-</div>
+    <!-- Datos del Representante -->
+    <div class="card mb-4">
+        <div class="card-header">Datos del Representante</div>
+        <div class="card-body">
+            <div class="form-group">
+                <label for="cedula_representante">Cédula:</label>
+                <input type="text" class="form-control" id="cedula_representante" name="cedula_representante" required>
+            </div>
+            <div class="form-group">
+                <label for="apellidos_representante">Apellidos:</label>
+                <input type="text" class="form-control" id="apellidos_representante" name="apellidos_representante" required>
+            </div>
+            <div class="form-group">
+                <label for="nombres_representante">Nombres:</label>
+                <input type="text" class="form-control" id="nombres_representante" name="nombres_representante" required>
+            </div>
+            <div class="form-group">
+                <label for="direccion_representante">Dirección:</label>
+                <input type="text" class="form-control" id="direccion_representante" name="direccion_representante" required>
+            </div>
+            <div class="form-group">
+                <label for="ocupacion_representante">Ocupación/Profesión:</label>
+                <input type="text" class="form-control" id="ocupacion_representante" name="ocupacion_representante" required>
+            </div>
+            <div class="form-group">
+                <label for="telefono_representante">Teléfono/Celular:</label>
+                <input type="text" class="form-control" id="telefono_representante" name="telefono_representante" required>
+            </div>
+            <div class="form-group">
+                <label for="correo_representante">Email:</label>
+                <input type="email" class="form-control" id="correo_representante" name="correo_representante" required>
+            </div>
+            <div class="form-group">
+                <label for="tipo_representante">Tipo de Representante:</label>
+                <select class="form-control" id="tipo_representante" name="tipo_representante" required>
+                    <option value="mama">Mamá</option>
+                    <option value="papa">Papá</option>
+                    <option value="tio/a">Tío/a</option>
+                    <option value="abuelo/a">Abuelo/a</option>
+                    <option value="hermano/a">Hermano/a</option>
+                    <option value="otro">Otro</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="foto_representante">Foto:</label>
+                <input type="file" class="form-control" id="foto_representante" name="foto_representante">
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Matricular Estudiante</button>
+</form>

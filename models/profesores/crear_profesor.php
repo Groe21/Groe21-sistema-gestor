@@ -1,42 +1,25 @@
 <?php
 include_once(__DIR__ . '/../../config/conexion.php');
 
-class ObtenerProfesor {
-    private $pdo;
+header('Content-Type: application/json');
 
-    public function __construct($pdo) {
-        $this->pdo = $pdo;
-    }
+try {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $nombre = $_POST['nombre'];
+        $id_periodo = $_POST['id_periodo'];
 
-    public function obtenerPersonasConRolProfesor() {
-        $sql = "SELECT id_persona, nombres, apellidos FROM obtener_profesores()";
-        $stmt = $this->pdo->prepare($sql);
+        $pdo = conectarBaseDeDatos();
+        $sql = "INSERT INTO escuela.profesores (nombre, id_periodo) VALUES (:nombre, :id_periodo)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':nombre', $nombre, PDO::PARAM_STR);
+        $stmt->bindParam(':id_periodo', $id_periodo, PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        echo json_encode(['success' => true]);
+    } else {
+        echo json_encode(['success' => false, 'error' => 'Método no permitido']);
     }
-
-    public function insertarProfesor($id_persona, $id_paralelo, $especialidad) {
-        $sql = "INSERT INTO escuela.profesores (id_persona, id_paralelo, especialidad) 
-                VALUES (:id_persona, :id_paralelo, :especialidad)";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([
-            ':id_persona' => $id_persona,
-            ':id_paralelo' => $id_paralelo,
-            ':especialidad' => $especialidad
-        ]);
-    }
-}
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $id_persona = $_POST['id_persona'];
-    $id_paralelo = $_POST['id_paralelo'];
-    $especialidad = $_POST['especialidad'];
-
-    $pdo = conectarBaseDeDatos();
-    $profesor = new ObtenerProfesor($pdo);
-    $profesor->insertarProfesor($id_persona, $id_paralelo, $especialidad);
-
-    header('Location: ../../views/profesores/mostrar_profesores.php');
-    exit();
+} catch (Exception $e) {
+    echo json_encode(['success' => false, 'error' => $e->getMessage()]);
 }
 ?>

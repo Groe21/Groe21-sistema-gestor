@@ -95,6 +95,27 @@ $usuario = new Usuario($pdo);
         </div>
         <!-- Fin del contenedor de la página -->
 
+    <!-- Modal de Confirmación de Eliminación -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Confirmar Eliminación</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ¿Estás seguro de que deseas eliminar este usuario?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" id="confirmDelete">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
@@ -132,6 +153,46 @@ $usuario = new Usuario($pdo);
             });
         });
     </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let userIdToDelete = null;
+
+        // Manejar el clic en el botón de eliminar
+        document.querySelectorAll('.btn-delete').forEach(button => {
+            button.addEventListener('click', function() {
+                userIdToDelete = this.getAttribute('data-user-id');
+                $('#deleteModal').modal('show');
+            });
+        });
+
+        // Manejar la confirmación de eliminación
+        document.getElementById('confirmDelete').addEventListener('click', function() {
+            if (userIdToDelete) {
+                fetch('<?php echo BASE_URL; ?>/models/usuarios/eliminar_usuario.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ userId: userIdToDelete })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Recargar la página o actualizar la tabla para reflejar los cambios
+                        location.reload();
+                    } else {
+                        alert('Error: ' + data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Ocurrió un error al eliminar el usuario.');
+                });
+            }
+        });
+    });
+</script>
 
 </body>
 

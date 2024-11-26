@@ -8,34 +8,21 @@ class BuscarPersona {
         $this->pdo = $pdo;
     }
 
-    public function buscarPorRol($tipo) {
-        $sql = "SELECT id_persona, cedula, nombres, apellidos, direccion, correo FROM escuela.personas WHERE rol = :tipo";
+    public function buscarPorRolYPeriodo($tipo, $id_periodo) {
+        $sql = "SELECT id_persona, cedula, nombres, apellidos, direccion, telefono, correo FROM escuela.personas WHERE rol = :tipo AND id_periodo = :id_periodo";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':tipo' => $tipo]);
+        $stmt->execute([':tipo' => $tipo, ':id_periodo' => $id_periodo]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
 
+$pdo = conectarBaseDeDatos();
+$buscarPersona = new BuscarPersona($pdo);
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $tipo = $_POST['tipo'];
-
-    $pdo = conectarBaseDeDatos();
-    $buscarPersona = new BuscarPersona($pdo);
-    $personas = $buscarPersona->buscarPorRol($tipo);
-
-    if ($personas) {
-        foreach ($personas as $persona) {
-            echo '<tr>';
-            echo '<td>' . $persona['cedula'] . '</td>';
-            echo '<td>' . $persona['nombres'] . '</td>';
-            echo '<td>' . $persona['apellidos'] . '</td>';
-            echo '<td>' . $persona['direccion'] . '</td>';
-            echo '<td>' . $persona['correo'] . '</td>';
-            echo '<td><button type="button" class="btn btn-primary btn-sm" onclick="seleccionarPersona(' . $persona['id_persona'] . ', \'' . $persona['cedula'] . '\', \'' . $persona['nombres'] . '\', \'' . $persona['apellidos'] . '\', \'' . $persona['direccion'] . '\', \'' . $persona['correo'] . '\', \'' . $tipo . '\')">Seleccionar</button></td>';
-            echo '</tr>';
-        }
-    } else {
-        echo '<tr><td colspan="6">No se encontraron personas con el rol especificado</td></tr>';
-    }
+    $tipo_persona = $_POST['tipo_persona'];
+    $id_periodo = $_POST['id_periodo'];
+    $personas = $buscarPersona->buscarPorRolYPeriodo($tipo_persona, $id_periodo);
+    echo json_encode($personas);
 }
 ?>

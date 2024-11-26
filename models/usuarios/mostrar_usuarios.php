@@ -9,8 +9,7 @@ class Usuario {
     }
 
     public function obtenerUsuarios() {
-        $sql = "SELECT p.nombres, p.apellidos, u.username FROM escuela.usuarios u
-                JOIN escuela.personas p ON u.id_persona = p.id_persona";
+        $sql = "SELECT id_usuario, username, password FROM escuela.usuarios";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -18,29 +17,35 @@ class Usuario {
 
     public function mostrarTablaUsuarios() {
         $usuarios = $this->obtenerUsuarios();
-        echo '<div class="container mt-5">
+        echo '<div class="container-fluid mt-5"> <!-- Cambiado a container-fluid -->
                 <div class="row justify-content-center">
-                    <div class="col-md-12"> <!-- Ajusta el ancho de la columna -->
+                    <div class="col-12"> <!-- Ajusta el ancho de la columna -->
                         <div class="card shadow">
                             <div class="card-header bg-primary text-white">
                                 <h4 class="mb-0">Lista de Usuarios</h4>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table id="tablaUsuarios" class="table table-bordered table-striped">
+                                    <table id="tablaUsuarios" class="table table-bordered table-striped w-100">
                                         <thead class="thead-dark">
                                             <tr>
-                                                <th>Nombre</th>
-                                                <th>Apellido</th>
                                                 <th>Usuario</th>
+                                                <th>Contraseña</th>
+                                                <th>Acciones</th>
                                             </tr>
                                         </thead>
                                         <tbody>';
         foreach ($usuarios as $usuario) {
+            $passwordMasked = str_repeat('*', strlen($usuario['password'])); // Reemplazar la contraseña con asteriscos
             echo '<tr>
-                    <td>' . htmlspecialchars($usuario['nombres']) . '</td>
-                    <td>' . htmlspecialchars($usuario['apellidos']) . '</td>
                     <td>' . htmlspecialchars($usuario['username']) . '</td>
+                    <td>' . htmlspecialchars($passwordMasked) . '</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm btn-delete" title="Eliminar" data-user-id="' . $usuario['id_usuario'] . '">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                        
+                    </td>
                   </tr>';
         }
         echo '              </tbody>

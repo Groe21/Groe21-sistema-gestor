@@ -1,6 +1,4 @@
 <?php
-include_once(__DIR__ . '/../../config/conexion.php');
-
 class ObtenerPeriodos {
     private $pdo;
 
@@ -17,8 +15,8 @@ class ObtenerPeriodos {
 
     public function generarSelect() {
         $periodos = $this->obtenerTodos();
-        $html = '<select class="form-control" id="id_periodo" name="id_periodo" required>';
-        $html .= '<option value="" selected disabled>Seleccione un periodo</option>';
+        $html = '<select class="form-control" id="id_periodo_buscar" name="id_periodo">';
+        $html .= '<option value="">Seleccione un periodo</option>';
         foreach ($periodos as $periodo) {
             $html .= '<option value="' . $periodo['id_periodo'] . '">' . $periodo['nombre_periodo'] . '</option>';
         }
