@@ -40,9 +40,44 @@ SELECT
     pa.nombre_paralelo AS curso
 FROM 
     escuela.profesores p
-JOIN 
-    escuela.paralelos pa ON p.id_paralelo = pa.id_paralelo
+LEFT JOIN 
+    escuela.asignaciones a ON p.id_profesor = a.id_profesor
+LEFT JOIN 
+    escuela.paralelos pa ON a.id_paralelo = pa.id_paralelo
 WHERE 
-    p.id_periodo = 14
+    p.id_periodo = 13
 ORDER BY 
     p.nombre;
+	
+	
+	
+SELECT 
+    e.id_estudiante,
+    e.cedula,
+    CONCAT(e.nombres, ' ', e.apellidos) AS nombre_completo,
+    p.nombre_paralelo AS paralelo
+FROM 
+    escuela.estudiantes e
+JOIN 
+    escuela.paralelos p ON e.id_paralelo = p.id_paralelo
+WHERE 
+    e.id_paralelo = 22
+ORDER BY 
+    e.apellidos, e.nombres;
+	
+	
+	
+SELECT 
+    CONCAT(e.nombres, ' ', e.apellidos) AS nombre_completo
+FROM 
+    escuela.estudiantes e
+JOIN 
+    escuela.profesores p ON e.id_paralelo = p.id_paralelo
+WHERE 
+    e.id_periodo = 14
+AND 
+    p.id_periodo = 14
+AND 
+    p.id_profesor = 9
+ORDER BY 
+    e.apellidos, e.nombres;
