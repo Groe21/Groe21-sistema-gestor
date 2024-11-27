@@ -10,9 +10,14 @@ try {
 
         $pdo = conectarBaseDeDatos();
         $sql = "SELECT 
-                    CONCAT(e.nombres, ' ', e.apellidos) AS nombre_completo
+                    e.id_estudiante,
+                    CONCAT(e.nombres, ' ', e.apellidos) AS nombre_completo,
+                    a.fecha,
+                    a.estado
                 FROM 
                     escuela.estudiantes e
+                LEFT JOIN 
+                    escuela.asistencia a ON e.id_estudiante = a.id_estudiante
                 WHERE 
                     e.id_paralelo = :id_paralelo
                 AND 

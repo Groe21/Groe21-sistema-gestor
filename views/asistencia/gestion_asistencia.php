@@ -5,7 +5,9 @@ include_once(__DIR__ . '/../../models/escuela/mostrar_paralelos.php');
 include_once(__DIR__ . '/../../models/asistencia/obtener_profesores_asistencia.php');
 $pdo = conectarBaseDeDatos();
 $listadoProfesores = new ListadoProfesores($pdo);
-$mostrarParalelos = new MostrarParalelos($pdo);
+$id_periodo = isset($_GET['id_periodo']) ? $_GET['id_periodo'] : null;
+$id_paralelo = isset($_GET['id_paralelo']) ? $_GET['id_paralelo'] : null;
+$fecha = date('Y-m-d'); // Puedes ajustar la fecha según sea necesario
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -62,7 +64,7 @@ $mostrarParalelos = new MostrarParalelos($pdo);
 
                 <!-- Fila de contenido -->
                 <div class="row">
-                <?php $listadoProfesores->mostrarTablaProfesores(13); ?>
+                <?php $listadoProfesores->mostrarTablaEstudiantesConAsistencia($id_periodo, $id_paralelo, $fecha);?>
                 </div>
 
             </div>
@@ -87,41 +89,45 @@ $mostrarParalelos = new MostrarParalelos($pdo);
         </div>
         <!-- Fin del contenedor de la página -->
 
-<!-- Modal de Ejemplo -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Detalles del Curso</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="table-responsive">
-          <table id="tablaEstudiantes" class="table table-bordered table-striped w-100">
-            <thead class="thead-dark">
-              <tr>
-                <th>Nombre Completo</th>
-                <th>Lunes</th>
-                <th>Martes</th>
-                <th>Miércoles</th>
-                <th>Jueves</th>
-                <th>Viernes</th>
-              </tr>
-            </thead>
-            <tbody id="tablaEstudiantesBody">
-              <!-- Los datos de los estudiantes se llenarán dinámicamente -->
-            </tbody>
-          </table>
+        <!-- Modal de Éxito -->
+        <div class="modal fade" id="modalExito" tabindex="-1" role="dialog" aria-labelledby="modalExitoLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalExitoLabel">Éxito</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Asistencia registrada correctamente.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="location.reload();">Aceptar</button>
+                    </div>
+                </div>
+            </div>
         </div>
+
+      <!-- Modal de Error -->
+      <div class="modal fade" id="modalError" tabindex="-1" role="dialog" aria-labelledby="modalErrorLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="modalErrorLabel">Error</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <div class="modal-body">
+                      Error al registrar la asistencia.
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-danger" data-dismiss="modal">Aceptar</button>
+                  </div>
+              </div>
+          </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-      </div>
-    </div>
-  </div>
-</div>
 
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
@@ -146,51 +152,29 @@ $mostrarParalelos = new MostrarParalelos($pdo);
     <script src="../../js/demo/chart-pie-demo.js"></script>
 
     <script>
-    $(document).ready(function() {
-        $('#exampleModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget);
-            var idProfesor = button.data('id-profesor');
-            var idParalelo = button.data('id-paralelo');
-            var modal = $(this);
-
-            // Limpiar el cuerpo de la tabla
-            modal.find('#tablaEstudiantesBody').empty();
-
-            // Hacer una solicitud AJAX para obtener los estudiantes del curso
-            $.ajax({
-                url: '<?php echo BASE_URL; ?>/models/asistencia/obtener_estudiantes_por_curso.php',
-                method: 'GET',
-                data: { id_paralelo: idParalelo, id_periodo: 13 }, // Ajusta el periodo según sea necesario
-                success: function(response) {
-                    try {
-                        var estudiantes = JSON.parse(response);
-                        if (estudiantes.length > 0) {
-                            estudiantes.forEach(function(estudiante) {
-                                var row = '<tr>' +
-                                    '<td>' + estudiante.nombre_completo + '</td>' +
-                                    '<td></td>' +
-                                    '<td></td>' +
-                                    '<td></td>' +
-                                    '<td></td>' +
-                                    '<td></td>' +
-                                    '</tr>';
-                                modal.find('#tablaEstudiantesBody').append(row);
-                            });
-                        } else {
-                            var row = '<tr><td colspan="6" class="text-center">No hay estudiantes registrados.</td></tr>';
-                            modal.find('#tablaEstudiantesBody').append(row);
-                        }
-                    } catch (e) {
-                        console.error('Error al parsear JSON:', e);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error al obtener los estudiantes:', error);
-                }
-            });
-        });
-    });
-</script>
+      function darAsistencia(idEstudiante, fecha) {
+          $.ajax({
+              url: '../../models/asistencia/dar_asistencia.php', // URL directa
+              method: 'POST',
+              data: { id_estudiante: idEstudiante, fecha: fecha },
+              success: function(response) {
+                  response = JSON.parse(response);
+                  if (response.success) {
+                      $('#modalExito').modal('show');
+                      setTimeout(function() {
+                          location.reload(); // Recargar la página para actualizar la tabla
+                      }, 2000); // Esperar 2 segundos antes de recargar
+                  } else {
+                      $('#modalError').modal('show');
+                  }
+              },
+              error: function(xhr, status, error) {
+                  console.error('Error al registrar la asistencia:', error);
+                  $('#modalError').modal('show');
+              }
+          });
+      }
+    </script>
 
 
 </body>

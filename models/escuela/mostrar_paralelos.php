@@ -23,9 +23,9 @@ class MostrarParalelos {
     public function mostrarTablaParalelos() {
         try {
             $paralelos = $this->obtenerParalelos();
-            echo '<div class="container mt-5">
+            echo '<div class="container-fluid mt-5"> <!-- Cambiar a container-fluid para ocupar todo el ancho -->
                     <div class="row justify-content-center">
-                        <div class="col-md-12"> <!-- Ajuste de ancho de la columna -->
+                        <div class="col-12"> <!-- Ajuste de ancho de la columna -->
                             <div class="card shadow">
                                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                                     <h4 class="mb-0">Lista de Cursos</h4>
@@ -34,25 +34,26 @@ class MostrarParalelos {
                                     </button>
                                 </div>
                                 <div class="card-body">
-                                    <table class="table table-bordered table-striped">
-                                        <thead class="thead-dark">
-                                            <tr>
-                                                <th>Nombre del Curso</th>
-                                                <th class="text-center">Acciones</th> <!-- Centrar el encabezado -->
-                                            </tr>
-                                        </thead>
-                                        <tbody>';
+                                    <div class="table-responsive"> <!-- Añadir clase table-responsive -->
+                                        <table class="table table-bordered table-striped w-100"> <!-- Añadir clase w-100 para ocupar todo el ancho -->
+                                            <thead class="thead-dark">
+                                                <tr>
+                                                    <th>Nombre del Curso</th>
+                                                    <th class="text-center">Acciones</th> <!-- Centrar el encabezado -->
+                                                </tr>
+                                            </thead>
+                                            <tbody>';
             if (empty($paralelos)) {
                 echo '<tr><td colspan="2" class="text-center">No hay cursos disponibles.</td></tr>';
             } else {
                 foreach ($paralelos as $paralelo) {
                     echo '<tr>
-                            <td>' . $paralelo['nombre_paralelo'] . '</td>
+                            <td>' . htmlspecialchars($paralelo['nombre_paralelo']) . '</td>
                             <td class="text-center"> <!-- Centrar el contenido de la celda -->
-                                <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editarCursoModal" data-id="' . $paralelo['id_paralelo'] . '" data-nombre="' . $paralelo['nombre_paralelo'] . '">
+                                <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editarCursoModal" data-id="' . htmlspecialchars($paralelo['id_paralelo']) . '" data-nombre="' . htmlspecialchars($paralelo['nombre_paralelo']) . '">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#eliminarCursoModal" data-id="' . $paralelo['id_paralelo'] . '">
+                                <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#eliminarCursoModal" data-id="' . htmlspecialchars($paralelo['id_paralelo']) . '">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </td>
@@ -60,7 +61,8 @@ class MostrarParalelos {
                 }
             }
             echo '              </tbody>
-                                    </table>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>

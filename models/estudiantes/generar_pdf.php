@@ -56,7 +56,7 @@ class PDF extends FPDF {
 
     // Mostrar imagen al lado de los datos
     function SectionImage($imagePath) {
-        if ($imagePath && file_exists($imagePath)) {
+        if ($imagePath && file_exists($imagePath) && preg_match('/\.(jpg|jpeg|png|gif)$/i', $imagePath)) {
             $this->Image($imagePath, 150, $this->GetY(), 30); // Ajustar la posición de la imagen
         }
     }
