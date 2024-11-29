@@ -1,6 +1,7 @@
 <?php
-include_once(__DIR__ . '/../../config/config.php');
 session_start();
+ob_start();
+include_once(__DIR__ . '/../../config/config.php');
 include_once(__DIR__ . '/../../models/escuela/mostrar_paralelos.php');
 include_once(__DIR__ . '/../../models/asistencia/obtener_profesores_asistencia.php');
 $pdo = conectarBaseDeDatos();
@@ -64,7 +65,7 @@ $fecha = date('Y-m-d'); // Puedes ajustar la fecha según sea necesario
 
                 <!-- Fila de contenido -->
                 <div class="row">
-                <?php $listadoProfesores->mostrarTablaEstudiantesConAsistencia($id_periodo, $id_paralelo, $fecha);?>
+                <?php $listadoProfesores->mostrarTablaEstudiantesConAsistencia($id_periodo, $id_paralelo); ?>
                 </div>
 
             </div>

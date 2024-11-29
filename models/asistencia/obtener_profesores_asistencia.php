@@ -109,15 +109,32 @@ class ListadoProfesores {
                     echo '</td>';
                 }
                 echo '  <td class="text-center">
-                            <button class="btn btn-info btn-sm">
-                                <i class="fas fa-file-pdf"></i> PDF
-                            </button>
+                            <a href="../../models/asistencia/asistencia_estudiante_semanal.php?id_estudiante=' . htmlspecialchars($estudiante['id_estudiante']) . '&id_periodo=' . htmlspecialchars($id_periodo) . '&id_paralelo=' . htmlspecialchars($id_paralelo) . '" class="btn btn-info btn-sm" target="_blank">
+                                <i class="fas fa-file-pdf"></i> Semanal
+                            </a>
+                            <a href="../../models/asistencia/asistencia_estudiante_mensual.php?id_estudiante=' . htmlspecialchars($estudiante['id_estudiante']) . '&id_periodo=' . htmlspecialchars($id_periodo) . '&id_paralelo=' . htmlspecialchars($id_paralelo) . '" class="btn btn-warning btn-sm" target="_blank">
+                                <i class="fas fa-calendar-alt"></i> Mensual
+                            </a>
+                            <a href="../../models/asistencia/asistencia_estudiante_anual.php?id_estudiante=' . htmlspecialchars($estudiante['id_estudiante']) . '&id_periodo=' . htmlspecialchars($id_periodo) . '&id_paralelo=' . htmlspecialchars($id_paralelo) . '" class="btn btn-success btn-sm" target="_blank">
+                                <i class="fas fa-calendar"></i> Anual
+                            </a>
                         </td>
                       </tr>';
             }
         }
         echo '              </tbody>
                                     </table>
+                                    <div class="text-center mt-3">
+                                        <a href="../../models/asistencia/asistencia_semanal.php?id_periodo=' . htmlspecialchars($id_periodo) . '&id_paralelo=' . htmlspecialchars($id_paralelo) . '" class="btn btn-primary">
+                                            <i class="fas fa-calendar-week"></i> Asistencia Semanal
+                                        </a>
+                                        <a href="../../models/asistencia/asistencia_mensual.php?id_periodo=' . htmlspecialchars($id_periodo) . '&id_paralelo=' . htmlspecialchars($id_paralelo) . '" class="btn btn-warning">
+                                            <i class="fas fa-calendar-alt"></i> Asistencia Mensual
+                                        </a>
+                                        <a href="../../models/asistencia/asistencia_anual.php?id_periodo=' . htmlspecialchars($id_periodo) . '&id_paralelo=' . htmlspecialchars($id_paralelo) . '" class="btn btn-success">
+                                            <i class="fas fa-calendar"></i> Asistencia Anual
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
