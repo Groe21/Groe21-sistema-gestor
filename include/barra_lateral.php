@@ -92,18 +92,27 @@
                 <h6 class="collapse-header">Gestión de Estudiantes:</h6>
                 <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/estudiantes/matricular_estudiante.php">Matricular Estudiante</a>
                 <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/estudiantes/listado_estudiantes.php">Estudiantes Matriculados</a>
-                <!-- <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/estudiantes/estudiantes.php">Matriculados</a>
-                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/estudiantes/listado_estudiantes.php">Listado Estudiantes</a>
-                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/estudiantes/periodos_culminados.php">Períodos Culminados</a>
-                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/estudiantes/inactivos.php">Estudiantes Inactivos</a> -->
             </div>
         </div>
     </li>
 
-
     <!-- Divisor -->
     <hr class="sidebar-divider">
 
+    <!-- Dropdown - Página Administrativa -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAdministrativo"
+            aria-expanded="true" aria-controls="collapseAdministrativo">
+            <i class="fas fa-user-shield"></i>
+            <span>Administración</span>
+        </a>
+        <div id="collapseAdministrativo" class="collapse" aria-labelledby="headingAdministrativo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Ir a página Administrativa:</h6>
+                <a class="collapse-item" href="../../web2/administrativo.php">Página Administrativa</a>
+            </div>
+        </div>
+    </li>
 
     <!-- Divisor -->
     <hr class="sidebar-divider">

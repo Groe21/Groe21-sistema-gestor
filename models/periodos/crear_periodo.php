@@ -23,7 +23,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $fecha_inicio = $_POST['fecha_inicio'];
     $fecha_fin = $_POST['fecha_fin'];
 
-    // Asegúrate de que la conexión a la base de datos se realice correctamente
     $pdo = conectarBaseDeDatos();
     if ($pdo) {
         $insertarPeriodo = new InsertarPeriodo($pdo);

@@ -133,3 +133,67 @@ $pdo = conectarBaseDeDatos();
         </div>
     </div>
 </div>
+
+<!-- Modal de Éxito -->
+<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successModalLabel">Éxito</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Periodo insertado correctamente.</div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="button" data-dismiss="modal" onclick="location.reload();">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Error -->
+<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="errorModalLabel">Error</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Error al insertar el periodo.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('#crearPeriodoModal form');
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        const formData = new FormData(form);
+        fetch(form.action, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(data => {
+            $('#crearPeriodoModal').modal('hide'); // Oculta el modal de creación
+            if (data.includes('Periodo insertado correctamente')) {
+                $('#successModal').modal('show'); // Muestra el modal de éxito
+            } else {
+                $('#errorModal').modal('show'); // Muestra el modal de error
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            $('#crearPeriodoModal').modal('hide');
+            $('#errorModal').modal('show'); // Muestra el modal de error en caso de fallo
+        });
+    });
+});
+</script>
