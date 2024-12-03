@@ -80,8 +80,14 @@ class PDF extends FPDF {
     }
 }
 
-if (isset($_GET['id_estudiante'])) {
+if (isset($_GET['id_estudiante']) && isset($_GET['fecha'])) {
     $id_estudiante = $_GET['id_estudiante'];
+    $fecha_inicio = $_GET['fecha'];
+
+    if (!is_numeric($id_estudiante) || empty($fecha_inicio)) {
+        echo 'ID de estudiante o fecha no válido.';
+        exit;
+    }
 
     $pdo = conectarBaseDeDatos();
 
@@ -101,15 +107,15 @@ if (isset($_GET['id_estudiante'])) {
     $stmt->execute([':id_estudiante' => $id_estudiante]);
     $profesor = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Obtener las fechas de asistencia únicas para la semana actual
-    $fechas = obtenerFechasSemana();
+    // Obtener las fechas de asistencia únicas para la semana seleccionada
+    $fechas = obtenerFechasSemana($fecha_inicio);
     $asistencias = [];
     foreach ($fechas as $fecha) {
         $sql = "SELECT estado FROM escuela.asistencia WHERE id_estudiante = :id_estudiante AND fecha = :fecha";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([':id_estudiante' => $id_estudiante, ':fecha' => $fecha]);
         $asistencia = $stmt->fetch(PDO::FETCH_ASSOC);
-        $asistencias[] = $asistencia ? ($asistencia['estado'] == 'Presente' ? '✓' : 'X') : 'X';
+        $asistencias[] = $asistencia && $asistencia['estado'] == 'Presente' ? 'X' : 'Asistió';
     }
 
     if ($estudiante) {
@@ -126,7 +132,7 @@ if (isset($_GET['id_estudiante'])) {
 
         $pdf->SectionTitle('Registro de Asistencia Semanal');
         $header = array_merge(['Nombre Estudiante'], array_map(function($fecha) {
-            return date('d/m', strtotime($fecha));
+            return traducirDia(date('l', strtotime($fecha))); // Mostrar el día de la semana en español
         }, $fechas));
         $data = [array_merge([$estudiante['nombres'] . ' ' . $estudiante['apellidos']], $asistencias)];
         $pdf->AttendanceTable($header, $data);
@@ -136,15 +142,27 @@ if (isset($_GET['id_estudiante'])) {
         echo 'No se encontraron datos para el estudiante con ID ' . htmlspecialchars($id_estudiante);
     }
 } else {
-    echo 'ID de estudiante no proporcionado.';
+    echo 'ID de estudiante o fecha no proporcionado.';
 }
 
-function obtenerFechasSemana() {
+function obtenerFechasSemana($fecha_inicio) {
     $fechas = [];
-    $inicioSemana = strtotime('last monday', strtotime('tomorrow'));
+    $inicioSemana = strtotime('last monday', strtotime($fecha_inicio));
     for ($i = 0; $i < 5; $i++) { // Solo de lunes a viernes
         $fechas[] = date('Y-m-d', strtotime("+$i days", $inicioSemana));
     }
     return $fechas;
 }
-?>
+
+function traducirDia($diaIngles) {
+    $dias = [
+        'Monday' => 'Lunes',
+        'Tuesday' => 'Martes',
+        'Wednesday' => 'Miércoles',
+        'Thursday' => 'Jueves',
+        'Friday' => 'Viernes',
+        'Saturday' => 'Sábado',
+        'Sunday' => 'Domingo'
+    ];
+    return $dias[$diaIngles];
+}

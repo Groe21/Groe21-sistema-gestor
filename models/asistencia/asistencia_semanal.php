@@ -113,7 +113,7 @@ if (isset($_GET['id_periodo']) && isset($_GET['id_paralelo'])) {
             $stmt = $pdo->prepare($sql);
             $stmt->execute([':id_estudiante' => $estudiante['id_estudiante'], ':fecha' => $fecha]);
             $asistencia = $stmt->fetch(PDO::FETCH_ASSOC);
-            $asistencia_estudiante[] = $asistencia ? ($asistencia['estado'] == 'Presente' ? '✓' : 'X') : 'X';
+            $asistencia_estudiante[] = $asistencia ? ($asistencia['estado'] == 'Presente' ? 'X' : 'Asistió') : 'Asistió';
         }
         $asistencias[] = array_merge([$estudiante['nombres'] . ' ' . $estudiante['apellidos']], $asistencia_estudiante);
     }

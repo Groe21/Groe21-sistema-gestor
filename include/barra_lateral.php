@@ -109,8 +109,7 @@
         <div id="collapseAdministrativo" class="collapse" aria-labelledby="headingAdministrativo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Ir a página Administrativa:</h6>
-                <a class="collapse-item" href="../../web2/administrativo.php">Página Administrativa</a>
-            </div>
+                <a class="collapse-item" href="<?php echo BASE_GENERAL; ?>/web2/administrativo.php">Página Administrativa</a>            </div>
         </div>
     </li>
 

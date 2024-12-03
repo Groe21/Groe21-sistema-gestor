@@ -109,15 +109,15 @@ class ListadoProfesores {
                     echo '</td>';
                 }
                 echo '  <td class="text-center">
-                            <a href="../../models/asistencia/asistencia_estudiante_semanal.php?id_estudiante=' . htmlspecialchars($estudiante['id_estudiante']) . '&id_periodo=' . htmlspecialchars($id_periodo) . '&id_paralelo=' . htmlspecialchars($id_paralelo) . '" class="btn btn-info btn-sm" target="_blank">
+                            <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#modalSemanalEstudiante" data-id-estudiante="' . htmlspecialchars($estudiante['id_estudiante']) . '">
                                 <i class="fas fa-file-pdf"></i> Semanal
-                            </a>
-                            <a href="../../models/asistencia/asistencia_estudiante_mensual.php?id_estudiante=' . htmlspecialchars($estudiante['id_estudiante']) . '&id_periodo=' . htmlspecialchars($id_periodo) . '&id_paralelo=' . htmlspecialchars($id_paralelo) . '" class="btn btn-warning btn-sm" target="_blank">
+                            </button>
+                            <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modalMensualEstudiante" data-id-estudiante="' . htmlspecialchars($estudiante['id_estudiante']) . '">
                                 <i class="fas fa-calendar-alt"></i> Mensual
-                            </a>
-                            <a href="../../models/asistencia/asistencia_estudiante_anual.php?id_estudiante=' . htmlspecialchars($estudiante['id_estudiante']) . '&id_periodo=' . htmlspecialchars($id_periodo) . '&id_paralelo=' . htmlspecialchars($id_paralelo) . '" class="btn btn-success btn-sm" target="_blank">
+                            </button>
+                            <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalAnualEstudiante" data-id-estudiante="' . htmlspecialchars($estudiante['id_estudiante']) . '">
                                 <i class="fas fa-calendar"></i> Anual
-                            </a>
+                            </button>
                         </td>
                       </tr>';
             }
@@ -125,15 +125,15 @@ class ListadoProfesores {
         echo '              </tbody>
                                     </table>
                                     <div class="text-center mt-3">
-                                        <a href="../../models/asistencia/asistencia_semanal.php?id_periodo=' . htmlspecialchars($id_periodo) . '&id_paralelo=' . htmlspecialchars($id_paralelo) . '" class="btn btn-primary">
+                                        <button class="btn btn-primary" data-toggle="modal" data-target="#modalSemanalGeneral" data-id-periodo="' . htmlspecialchars($id_periodo) . '" data-id-paralelo="' . htmlspecialchars($id_paralelo) . '">
                                             <i class="fas fa-calendar-week"></i> Asistencia Semanal
-                                        </a>
-                                        <a href="../../models/asistencia/asistencia_mensual.php?id_periodo=' . htmlspecialchars($id_periodo) . '&id_paralelo=' . htmlspecialchars($id_paralelo) . '" class="btn btn-warning">
+                                        </button>
+                                        <button class="btn btn-warning" data-toggle="modal" data-target="#modalMensualGeneral" data-id-periodo="' . htmlspecialchars($id_periodo) . '" data-id-paralelo="' . htmlspecialchars($id_paralelo) . '">
                                             <i class="fas fa-calendar-alt"></i> Asistencia Mensual
-                                        </a>
-                                        <a href="../../models/asistencia/asistencia_anual.php?id_periodo=' . htmlspecialchars($id_periodo) . '&id_paralelo=' . htmlspecialchars($id_paralelo) . '" class="btn btn-success">
+                                        </button>
+                                        <button class="btn btn-success" data-toggle="modal" data-target="#modalAnualGeneral" data-id-periodo="' . htmlspecialchars($id_periodo) . '" data-id-paralelo="' . htmlspecialchars($id_paralelo) . '">
                                             <i class="fas fa-calendar"></i> Asistencia Anual
-                                        </a>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -141,6 +141,150 @@ class ListadoProfesores {
                     </div>
                 </div>
               </div>';
+    
+        // Modales para seleccionar fechas
+        echo $this->generarModales();
+    }
+    
+    private function generarModales() {
+        return '
+        <!-- Modal Semanal Estudiante -->
+        <div class="modal fade" id="modalSemanalEstudiante" tabindex="-1" role="dialog" aria-labelledby="modalSemanalEstudianteLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalSemanalEstudianteLabel">Seleccionar Semana</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="formSemanalEstudiante">
+                            <div class="form-group">
+                                <label for="fechaSemanalEstudiante">Fecha de inicio de la semana</label>
+                                <input type="date" class="form-control" id="fechaSemanalEstudiante" name="fecha">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Generar Reporte</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Modal Mensual Estudiante -->
+        <div class="modal fade" id="modalMensualEstudiante" tabindex="-1" role="dialog" aria-labelledby="modalMensualEstudianteLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalMensualEstudianteLabel">Seleccionar Mes</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="formMensualEstudiante">
+                            <div class="form-group">
+                                <label for="fechaMensualEstudiante">Fecha de inicio del mes</label>
+                                <input type="month" class="form-control" id="fechaMensualEstudiante" name="fecha">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Generar Reporte</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Modal Anual Estudiante -->
+        <div class="modal fade" id="modalAnualEstudiante" tabindex="-1" role="dialog" aria-labelledby="modalAnualEstudianteLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalAnualEstudianteLabel">Seleccionar Año</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="formAnualEstudiante">
+                            <div class="form-group">
+                                <label for="fechaAnualEstudiante">Fecha de inicio del año</label>
+                                <input type="number" class="form-control" id="fechaAnualEstudiante" name="fecha" min="2000" max="2100">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Generar Reporte</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Modal Semanal General -->
+        <div class="modal fade" id="modalSemanalGeneral" tabindex="-1" role="dialog" aria-labelledby="modalSemanalGeneralLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalSemanalGeneralLabel">Seleccionar Semana</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="formSemanalGeneral">
+                            <div class="form-group">
+                                <label for="fechaSemanalGeneral">Fecha de inicio de la semana</label>
+                                <input type="date" class="form-control" id="fechaSemanalGeneral" name="fecha">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Generar Reporte</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Modal Mensual General -->
+        <div class="modal fade" id="modalMensualGeneral" tabindex="-1" role="dialog" aria-labelledby="modalMensualGeneralLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalMensualGeneralLabel">Seleccionar Mes</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="formMensualGeneral">
+                            <div class="form-group">
+                                <label for="fechaMensualGeneral">Fecha de inicio del mes</label>
+                                <input type="month" class="form-control" id="fechaMensualGeneral" name="fecha">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Generar Reporte</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Modal Anual General -->
+        <div class="modal fade" id="modalAnualGeneral" tabindex="-1" role="dialog" aria-labelledby="modalAnualGeneralLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalAnualGeneralLabel">Seleccionar Año</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="formAnualGeneral">
+                            <div class="form-group">
+                                <label for="fechaAnualGeneral">Fecha de inicio del año</label>
+                                <input type="number" class="form-control" id="fechaAnualGeneral" name="fecha" min="2000" max="2100">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Generar Reporte</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>';
     }
 
     private function obtenerFechasSemana() {

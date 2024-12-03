@@ -54,7 +54,7 @@ $pdo = conectarBaseDeDatos();
             <!-- Desplegable - Información del usuario -->
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                  aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="#">
+                <!-- <a class="dropdown-item" href="#">
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     Perfil
                 </a>
@@ -66,7 +66,7 @@ $pdo = conectarBaseDeDatos();
                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                     Registro de actividad
                 </a>
-                <div class="dropdown-divider"></div>
+                <div class="dropdown-divider"></div> -->
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#crearPeriodoModal">
                     <i class="fas fa-calendar-plus fa-sm fa-fw mr-2 text-gray-400"></i>
                     Crear Periodo

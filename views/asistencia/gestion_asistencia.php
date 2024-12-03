@@ -177,6 +177,110 @@ $fecha = date('Y-m-d'); // Puedes ajustar la fecha según sea necesario
       }
     </script>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Semanal Estudiante
+    document.getElementById('formSemanalEstudiante').addEventListener('submit', function(event) {
+        event.preventDefault();
+        var fecha = document.getElementById('fechaSemanalEstudiante').value;
+        var idEstudiante = document.querySelector('#modalSemanalEstudiante').getAttribute('data-id-estudiante');
+        window.open('../../models/asistencia/asistencia_estudiante_semanal.php?id_estudiante=' + idEstudiante + '&fecha=' + fecha, '_blank');
+    });
+
+    // Mensual Estudiante
+    document.getElementById('formMensualEstudiante').addEventListener('submit', function(event) {
+        event.preventDefault();
+        var fecha = document.getElementById('fechaMensualEstudiante').value;
+        var idEstudiante = document.querySelector('#modalMensualEstudiante').getAttribute('data-id-estudiante');
+        window.open('../../models/asistencia/asistencia_estudiante_mensual.php?id_estudiante=' + idEstudiante + '&fecha=' + fecha, '_blank');
+    });
+
+    // Anual Estudiante
+    document.getElementById('formAnualEstudiante').addEventListener('submit', function(event) {
+        event.preventDefault();
+        var fecha = document.getElementById('fechaAnualEstudiante').value;
+        var idEstudiante = document.querySelector('#modalAnualEstudiante').getAttribute('data-id-estudiante');
+        window.open('../../models/asistencia/asistencia_estudiante_anual.php?id_estudiante=' + idEstudiante + '&fecha=' + fecha, '_blank');
+    });
+
+    // Eventos para capturar la apertura de los modales y asignar el data-id-estudiante
+    $('#modalSemanalEstudiante').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget); // Botón que activó el modal
+        var idEstudiante = button.data('id-estudiante'); // Extraer información del data-* attribute
+        var modal = $(this);
+        modal.attr('data-id-estudiante', idEstudiante);
+    });
+
+    $('#modalMensualEstudiante').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget);
+        var idEstudiante = button.data('id-estudiante');
+        var modal = $(this);
+        modal.attr('data-id-estudiante', idEstudiante);
+    });
+
+    $('#modalAnualEstudiante').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget);
+        var idEstudiante = button.data('id-estudiante');
+        var modal = $(this);
+        modal.attr('data-id-estudiante', idEstudiante);
+    });
+
+    // Semanal General
+    document.getElementById('formSemanalGeneral').addEventListener('submit', function(event) {
+        event.preventDefault();
+        var fecha = document.getElementById('fechaSemanalGeneral').value;
+        var idPeriodo = document.querySelector('#modalSemanalGeneral').getAttribute('data-id-periodo');
+        var idParalelo = document.querySelector('#modalSemanalGeneral').getAttribute('data-id-paralelo');
+        window.open('../../models/asistencia/asistencia_semanal.php?id_periodo=' + idPeriodo + '&id_paralelo=' + idParalelo + '&fecha=' + fecha, '_blank');
+    });
+
+    // Mensual General
+    document.getElementById('formMensualGeneral').addEventListener('submit', function(event) {
+        event.preventDefault();
+        var fecha = document.getElementById('fechaMensualGeneral').value;
+        var idPeriodo = document.querySelector('#modalMensualGeneral').getAttribute('data-id-periodo');
+        var idParalelo = document.querySelector('#modalMensualGeneral').getAttribute('data-id-paralelo');
+        window.open('../../models/asistencia/asistencia_mensual.php?id_periodo=' + idPeriodo + '&id_paralelo=' + idParalelo + '&fecha=' + fecha, '_blank');
+    });
+
+    // Anual General
+    document.getElementById('formAnualGeneral').addEventListener('submit', function(event) {
+        event.preventDefault();
+        var fecha = document.getElementById('fechaAnualGeneral').value;
+        var idPeriodo = document.querySelector('#modalAnualGeneral').getAttribute('data-id-periodo');
+        var idParalelo = document.querySelector('#modalAnualGeneral').getAttribute('data-id-paralelo');
+        window.open('../../models/asistencia/asistencia_anual.php?id_periodo=' + idPeriodo + '&id_paralelo=' + idParalelo + '&fecha=' + fecha, '_blank');
+    });
+
+    // Eventos para capturar la apertura de los modales y asignar los data-id-periodo y data-id-paralelo
+    $('#modalSemanalGeneral').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget); // Botón que activó el modal
+        var idPeriodo = button.data('id-periodo'); // Extraer información del data-* attribute
+        var idParalelo = button.data('id-paralelo');
+        var modal = $(this);
+        modal.attr('data-id-periodo', idPeriodo);
+        modal.attr('data-id-paralelo', idParalelo);
+    });
+
+    $('#modalMensualGeneral').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget);
+        var idPeriodo = button.data('id-periodo');
+        var idParalelo = button.data('id-paralelo');
+        var modal = $(this);
+        modal.attr('data-id-periodo', idPeriodo);
+        modal.attr('data-id-paralelo', idParalelo);
+    });
+
+    $('#modalAnualGeneral').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget);
+        var idPeriodo = button.data('id-periodo');
+        var idParalelo = button.data('id-paralelo');
+        var modal = $(this);
+        modal.attr('data-id-periodo', idPeriodo);
+        modal.attr('data-id-paralelo', idParalelo);
+    });
+});
+</script>
 
 </body>
 

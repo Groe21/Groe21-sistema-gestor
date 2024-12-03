@@ -4,9 +4,14 @@ require_once(__DIR__ . '/../../fpdf/fpdf.php');
 
 class PDF extends FPDF {
     private $nombreProfesor;
+    private $anio;
 
     public function setNombreProfesor($nombre) {
         $this->nombreProfesor = $nombre;
+    }
+
+    public function setAnio($anio) {
+        $this->anio = $anio;
     }
 
     // Cabecera de página
@@ -22,6 +27,7 @@ class PDF extends FPDF {
         $this->Cell(0, 6, utf8_decode(''), 0, 1, 'C');
         $this->SetFont('TIMES', 'B', 12);
         $this->Cell(0, 0, 'CONTROL DE ASISTENCIA', 0, 1, 'C');
+        $this->Ln(5);
         $this->Ln(10);
     }
 
@@ -109,7 +115,7 @@ if (isset($_GET['id_periodo']) && isset($_GET['id_paralelo'])) {
             $stmt = $pdo->prepare($sql);
             $stmt->execute([':id_estudiante' => $estudiante['id_estudiante'], ':fecha' => $fecha]);
             $asistencia = $stmt->fetch(PDO::FETCH_ASSOC);
-            $asistencia_estudiante[] = $asistencia ? ($asistencia['estado'] == 'Presente' ? '✓' : '') : '';
+            $asistencia_estudiante[] = $asistencia ? ($asistencia['estado'] == 'Presente' ? 'Asistió' : 'X') : 'X';
         }
         $asistencias[] = array_merge([$estudiante['nombres'] . ' ' . $estudiante['apellidos']], $asistencia_estudiante);
     }
@@ -122,7 +128,11 @@ if (isset($_GET['id_periodo']) && isset($_GET['id_paralelo'])) {
             $pdf->setNombreProfesor($profesor['nombre']);
         }
 
-        $pdf->SectionTitle('AÑO ..........');
+        // Obtener el año de las fechas
+        $anio = date('Y', strtotime($fechas[0]));
+        $pdf->setAnio($anio);
+
+        $pdf->SectionTitle('Año ' . $anio);
         $header = array_merge(['Nombre Estudiante'], array_map(function($fecha) {
             return date('d/m', strtotime($fecha));
         }, $fechas));
@@ -135,4 +145,3 @@ if (isset($_GET['id_periodo']) && isset($_GET['id_paralelo'])) {
 } else {
     echo 'ID de periodo o paralelo no proporcionado.';
 }
-?>

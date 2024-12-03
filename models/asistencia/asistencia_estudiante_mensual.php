@@ -109,7 +109,7 @@ if (isset($_GET['id_estudiante'])) {
         $stmt = $pdo->prepare($sql);
         $stmt->execute([':id_estudiante' => $id_estudiante, ':fecha' => $fecha]);
         $asistencia = $stmt->fetch(PDO::FETCH_ASSOC);
-        $asistencias[] = $asistencia ? ($asistencia['estado'] == 'Presente' ? '✓' : 'X') : 'X';
+        $asistencias[] = $asistencia && $asistencia['estado'] == 'Presente' ? 'Asistió' : 'X';
     }
 
     if ($estudiante) {
@@ -126,7 +126,7 @@ if (isset($_GET['id_estudiante'])) {
 
         $pdf->SectionTitle('Registro de Asistencia Mensual');
         $header = array_merge(['Nombre Estudiante'], array_map(function($fecha) {
-            return date('d', strtotime($fecha));
+            return date('d', strtotime($fecha)); // Mostrar el día del mes
         }, $fechas));
         $data = [array_merge([$estudiante['nombres'] . ' ' . $estudiante['apellidos']], $asistencias)];
         $pdf->AttendanceTable($header, $data);
@@ -150,4 +150,3 @@ function obtenerFechasMes() {
     }
     return $fechas;
 }
-?>

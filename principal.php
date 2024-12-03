@@ -60,7 +60,7 @@ include_once(__DIR__ . '/config/config.php');
                 <div class="row">
 
                     <!-- Tarjeta de ejemplo sin PHP -->
-                    <div class="col-xl-3 col-md-6 mb-4">
+                    <!-- <div class="col-xl-3 col-md-6 mb-4">
                         <div class="card border-left-warning shadow h-100 py-2">
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
@@ -76,7 +76,7 @@ include_once(__DIR__ . '/config/config.php');
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
                 </div>
 
