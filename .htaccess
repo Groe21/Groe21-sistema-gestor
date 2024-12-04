@@ -1,16 +1,20 @@
 # Redirigir errores al archivo principal
-ErrorDocument 404 /Groe21-sistema-gestor/principal.php
-ErrorDocument 403 /Groe21-sistema-gestor/principal.php
-ErrorDocument 500 /Groe21-sistema-gestor/principal.php
 
-# Asegurar que principal.php sea el archivo predeterminado
-DirectoryIndex principal.php
+ErrorDocument 404 /Groe21-sistema-gestor/index.php
+ErrorDocument 403 /Groe21-sistema-gestor/index.php
+ErrorDocument 500 /Groe21-sistema-gestor/index.php
 
-# Reescritura para asegurarse de que siempre cargue principal.php si ocurre algún error
+# Asegurar que index.php sea el archivo predeterminado
+
+DirectoryIndex index.php
+
+# Reescritura para asegurarse de que siempre cargue index.php si ocurre algún error
+
 RewriteEngine On
 RewriteBase /Groe21-sistema-gestor/
 
-# Redirigir cualquier petición no encontrada al archivo principal.php
+# Redirigir cualquier petición no encontrada al archivo index.php
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ principal.php [L]
+RewriteRule ^(.\*)$ index.php [L]

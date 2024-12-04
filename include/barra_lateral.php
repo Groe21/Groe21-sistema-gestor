@@ -26,30 +26,6 @@
     <!-- Divisor -->
     <hr class="sidebar-divider">
 
-     <!-- Encabezado -->
-     <div class="sidebar-heading">
-        Gestión de Usuarios
-    </div>
-
-    <!-- Dropdown - Gestión de Usuarios -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUsuarios"
-            aria-expanded="true" aria-controls="collapseUsuarios">
-            <i class="fas fa-user-cog"></i>
-            <span>Usuarios</span>
-        </a>
-        <div id="collapseUsuarios" class="collapse" aria-labelledby="headingUsuarios" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Gestión de Usuarios:</h6>
-                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/usuarios/crear_usuario.php">Crear Usuario</a>
-                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/usuarios/listado_usuarios.php">Listado de Usuarios</a>
-            </div>
-        </div>
-    </li>
-
-    <!-- Divisor -->
-    <hr class="sidebar-divider">
-
     <!-- Encabezado -->
     <div class="sidebar-heading">
         Gestión de la Escuela
@@ -65,30 +41,12 @@
         <div id="collapseEscuela" class="collapse" aria-labelledby="headingEscuela" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Gestión de la Escuela:</h6>
-                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/escuela/gestionar_cursos.php">gestion de cursos</a>
-                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/escuela/gestionar_profesores.php">gestion de profesores</a>
-                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/asistencia/gestion_asistencia.php">gestion de asistencia</a>
-            </div>
-        </div>
-    </li>
-
-    <!-- Divisor -->
-    <hr class="sidebar-divider">
-
-    <!-- Encabezado -->
-    <div class="sidebar-heading">
-        Gestión de Estudiantes
-    </div>
-
-    <!-- Dropdown - Gestión de Estudiantes -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseEstudiantes"
-            aria-expanded="true" aria-controls="collapseEstudiantes">
-            <i class="fas fa-user-graduate"></i>
-            <span>Estudiantes</span>
-        </a>
-        <div id="collapseEstudiantes" class="collapse" aria-labelledby="headingEstudiantes" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/escuela/gestionar_cursos.php">Gestión de Cursos</a>
+                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/escuela/gestionar_profesores.php">Gestión de Profesores</a>
+                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/asistencia/gestion_asistencia.php">Gestión de Asistencia</a>
+                <h6 class="collapse-header">Gestión de Usuarios:</h6>
+                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/usuarios/crear_usuario.php">Crear Usuario</a>
+                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/usuarios/listado_usuarios.php">Listado de Usuarios</a>
                 <h6 class="collapse-header">Gestión de Estudiantes:</h6>
                 <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/estudiantes/matricular_estudiante.php">Matricular Estudiante</a>
                 <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/estudiantes/listado_estudiantes.php">Estudiantes Matriculados</a>
@@ -104,12 +62,15 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAdministrativo"
             aria-expanded="true" aria-controls="collapseAdministrativo">
             <i class="fas fa-user-shield"></i>
-            <span>Administración</span>
+            <span>Página administrativa</span>
         </a>
         <div id="collapseAdministrativo" class="collapse" aria-labelledby="headingAdministrativo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Ir a página Administrativa:</h6>
-                <a class="collapse-item" href="<?php echo BASE_GENERAL; ?>/web2/administrativo.php">Página Administrativa</a>            </div>
+                <h6 class="collapse-header">Gestión Página</h6>
+                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/administrativo/administrativa.php">Página Adminstrativa</a>            
+                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/administrativo/blog.php">Blog</a>            
+                <a class="collapse-item" href="<?php echo BASE_URL; ?>/views/administrativo/galeria.php">Galería</a>            
+            </div>
         </div>
     </li>
 
