@@ -78,7 +78,7 @@ $mostrarBlog = new MostrarBlog($pdo);
     <!-- Detail End -->
 
     <!-- Footer Start -->
-    
+    <?php include_once(__DIR__ . '/include/pagina_principal/pie_de_pagina.php'); ?>
     <!-- Footer End -->
 
 

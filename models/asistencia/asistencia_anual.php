@@ -58,7 +58,7 @@ class PDF extends FPDF {
         $pageWidth = $this->GetPageWidth() - 40; // Ancho de la página menos márgenes
         $nameColumnWidth = 50; // Ancho de la columna de nombres
         $remainingWidth = $pageWidth - $nameColumnWidth;
-        $columnWidth = $remainingWidth / (count($header) - 1); // Ancho de las columnas de días
+        $columnWidth = count($header) > 1 ? $remainingWidth / (count($header) - 1) : $remainingWidth; // Ancho de las columnas de días
 
         $widths = array_merge([$nameColumnWidth], array_fill(0, count($header) - 1, $columnWidth));
         $marginLeft = 20; // Margen izquierdo para mover la tabla a la derecha
@@ -79,9 +79,10 @@ class PDF extends FPDF {
     }
 }
 
-if (isset($_GET['id_periodo']) && isset($_GET['id_paralelo'])) {
+if (isset($_GET['id_periodo']) && isset($_GET['id_paralelo']) && isset($_GET['fecha'])) {
     $id_periodo = $_GET['id_periodo'];
     $id_paralelo = $_GET['id_paralelo'];
+    $anio_elegido = $_GET['fecha'];
 
     $pdo = conectarBaseDeDatos();
 
@@ -101,11 +102,16 @@ if (isset($_GET['id_periodo']) && isset($_GET['id_paralelo'])) {
     $stmt->execute([':id_periodo' => $id_periodo, ':id_paralelo' => $id_paralelo]);
     $estudiantes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Obtener las fechas de asistencia únicas para el año actual
-    $sql = "SELECT DISTINCT fecha FROM escuela.asistencia WHERE EXTRACT(YEAR FROM fecha) = EXTRACT(YEAR FROM CURRENT_DATE) ORDER BY fecha";
+    // Obtener las fechas de asistencia únicas para el año elegido
+    $sql = "SELECT DISTINCT fecha FROM escuela.asistencia WHERE EXTRACT(YEAR FROM fecha) = :anio_elegido ORDER BY fecha";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute();
+    $stmt->execute([':anio_elegido' => $anio_elegido]);
     $fechas = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+    if (empty($fechas)) {
+        echo 'No se encontraron fechas de asistencia para el año especificado.';
+        exit;
+    }
 
     $asistencias = [];
     foreach ($estudiantes as $estudiante) {
@@ -128,11 +134,9 @@ if (isset($_GET['id_periodo']) && isset($_GET['id_paralelo'])) {
             $pdf->setNombreProfesor($profesor['nombre']);
         }
 
-        // Obtener el año de las fechas
-        $anio = date('Y', strtotime($fechas[0]));
-        $pdf->setAnio($anio);
+        $pdf->setAnio($anio_elegido);
 
-        $pdf->SectionTitle('Año ' . $anio);
+        $pdf->SectionTitle('Año ' . $anio_elegido);
         $header = array_merge(['Nombre Estudiante'], array_map(function($fecha) {
             return date('d/m', strtotime($fecha));
         }, $fechas));
@@ -143,5 +147,6 @@ if (isset($_GET['id_periodo']) && isset($_GET['id_paralelo'])) {
         echo 'No se encontraron datos para los estudiantes en el periodo y paralelo especificados.';
     }
 } else {
-    echo 'ID de periodo o paralelo no proporcionado.';
+    echo 'ID de periodo, paralelo o fecha no proporcionado.';
 }
+?>

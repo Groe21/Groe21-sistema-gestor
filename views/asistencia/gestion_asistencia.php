@@ -8,7 +8,7 @@ $pdo = conectarBaseDeDatos();
 $listadoProfesores = new ListadoProfesores($pdo);
 $id_periodo = isset($_GET['id_periodo']) ? $_GET['id_periodo'] : null;
 $id_paralelo = isset($_GET['id_paralelo']) ? $_GET['id_paralelo'] : null;
-$fecha = date('Y-m-d'); // Puedes ajustar la fecha según sea necesario
+$fecha = date('Y-m-d');
 ?>
 <!DOCTYPE html>
 <html lang="en">

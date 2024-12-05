@@ -109,16 +109,9 @@ if (isset($_GET['id_estudiante']) && isset($_GET['fecha'])) {
     $stmt->execute([':id_paralelo' => $estudiante['id_paralelo']]);
     $profesor = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Obtener las fechas de asistencia únicas para el año actual
-    $fechas = obtenerFechasAno($pdo, $id_estudiante);
-    $asistencias = [];
-    foreach ($fechas as $fecha) {
-        $sql = "SELECT estado FROM escuela.asistencia WHERE id_estudiante = :id_estudiante AND fecha = :fecha";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([':id_estudiante' => $id_estudiante, ':fecha' => $fecha]);
-        $asistencia = $stmt->fetch(PDO::FETCH_ASSOC);
-        $asistencias[] = $asistencia && $asistencia['estado'] == 'Presente' ? 'Asistió' : 'X';
-    }
+    // Obtener las fechas de asistencia únicas para el año seleccionado
+    $fechas = obtenerFechasAno($anio);
+    $asistencias = obtenerResumenMensual($pdo, $id_estudiante, $anio);
 
     if ($estudiante) {
         $pdf = new PDF('L', 'mm', 'A4'); // 'L' para orientación horizontal (paisaje)
@@ -134,9 +127,7 @@ if (isset($_GET['id_estudiante']) && isset($_GET['fecha'])) {
         $pdf->SectionText('Nombre', $estudiante['nombres'] . ' ' . $estudiante['apellidos']);
 
         $pdf->SectionTitle('Registro de Asistencia Anual');
-        $header = array_merge(['Nombre Estudiante'], array_map(function($fecha) {
-            return date('d/m', strtotime($fecha)); // Mostrar el día y mes
-        }, $fechas));
+        $header = ['Nombre Estudiante', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
         $data = [array_merge([$estudiante['nombres'] . ' ' . $estudiante['apellidos']], $asistencias)];
         $pdf->AttendanceTable($header, $data);
 
@@ -148,17 +139,31 @@ if (isset($_GET['id_estudiante']) && isset($_GET['fecha'])) {
     echo 'ID de estudiante o fecha no proporcionado.';
 }
 
-function obtenerFechasAno($pdo, $id_estudiante) {
+function obtenerFechasAno($anio) {
     $fechas = [];
-    $sql = "SELECT DISTINCT fecha FROM escuela.asistencia WHERE id_estudiante = :id_estudiante AND EXTRACT(YEAR FROM fecha) = EXTRACT(YEAR FROM CURRENT_DATE) ORDER BY fecha";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([':id_estudiante' => $id_estudiante]);
-    $result = $stmt->fetchAll(PDO::FETCH_COLUMN);
-
-    foreach ($result as $fecha) {
-        if (date('N', strtotime($fecha)) < 6) { // Excluir sábados (6) y domingos (7)
-            $fechas[] = $fecha;
+    $inicioAno = strtotime($anio . '-01-01');
+    $finAno = strtotime($anio . '-12-31');
+    for ($fecha = $inicioAno; $fecha <= $finAno; $fecha = strtotime('+1 day', $fecha)) {
+        if (date('N', $fecha) < 6) { // Excluir sábados (6) y domingos (7)
+            $fechas[] = date('Y-m-d', $fecha);
         }
     }
     return $fechas;
 }
+
+function obtenerResumenMensual($pdo, $id_estudiante, $anio) {
+    $resumen = [];
+    for ($mes = 1; $mes <= 12; $mes++) {
+        $sql = "SELECT COUNT(*) as total_dias, SUM(CASE WHEN estado = 'Presente' THEN 1 ELSE 0 END) as dias_asistidos
+                FROM escuela.asistencia
+                WHERE id_estudiante = :id_estudiante AND EXTRACT(YEAR FROM fecha) = :anio AND EXTRACT(MONTH FROM fecha) = :mes";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([':id_estudiante' => $id_estudiante, ':anio' => $anio, ':mes' => $mes]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $total_dias = $result['total_dias'];
+        $dias_asistidos = $result['dias_asistidos'];
+        $resumen[] = $dias_asistidos . '/' . $total_dias;
+    }
+    return $resumen;
+}
+?>

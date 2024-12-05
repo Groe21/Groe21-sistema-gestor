@@ -80,8 +80,14 @@ class PDF extends FPDF {
     }
 }
 
-if (isset($_GET['id_estudiante'])) {
+if (isset($_GET['id_estudiante']) && isset($_GET['fecha'])) {
     $id_estudiante = $_GET['id_estudiante'];
+    $fecha_inicio = $_GET['fecha'];
+
+    if (!is_numeric($id_estudiante) || empty($fecha_inicio)) {
+        echo 'ID de estudiante o fecha no válido.';
+        exit;
+    }
 
     $pdo = conectarBaseDeDatos();
 
@@ -101,8 +107,8 @@ if (isset($_GET['id_estudiante'])) {
     $stmt->execute([':id_estudiante' => $id_estudiante]);
     $profesor = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Obtener las fechas de asistencia únicas para el mes actual
-    $fechas = obtenerFechasMes();
+    // Obtener las fechas de asistencia únicas para el mes seleccionado
+    $fechas = obtenerFechasMes($fecha_inicio);
     $asistencias = [];
     foreach ($fechas as $fecha) {
         $sql = "SELECT estado FROM escuela.asistencia WHERE id_estudiante = :id_estudiante AND fecha = :fecha";
@@ -121,10 +127,18 @@ if (isset($_GET['id_estudiante'])) {
             $pdf->setNombreProfesor($profesor['nombre']);
         }
 
+        $meses_espanol = [
+            'January' => 'Enero', 'February' => 'Febrero', 'March' => 'Marzo', 'April' => 'Abril',
+            'May' => 'Mayo', 'June' => 'Junio', 'July' => 'Julio', 'August' => 'Agosto',
+            'September' => 'Septiembre', 'October' => 'Octubre', 'November' => 'Noviembre', 'December' => 'Diciembre'
+        ];
+        $mes = $meses_espanol[date('F', strtotime($fecha_inicio))];
+        $anio = date('Y', strtotime($fecha_inicio));
+
         $pdf->SectionTitle('Datos del Estudiante');
         $pdf->SectionText('Nombre', $estudiante['nombres'] . ' ' . $estudiante['apellidos']);
 
-        $pdf->SectionTitle('Registro de Asistencia Mensual');
+        $pdf->SectionTitle('MES DE ' . strtoupper($mes) . ' DEL ' . $anio);
         $header = array_merge(['Nombre Estudiante'], array_map(function($fecha) {
             return date('d', strtotime($fecha)); // Mostrar el día del mes
         }, $fechas));
@@ -136,13 +150,13 @@ if (isset($_GET['id_estudiante'])) {
         echo 'No se encontraron datos para el estudiante con ID ' . htmlspecialchars($id_estudiante);
     }
 } else {
-    echo 'ID de estudiante no proporcionado.';
+    echo 'ID de estudiante o fecha no proporcionado.';
 }
 
-function obtenerFechasMes() {
+function obtenerFechasMes($fecha_inicio) {
     $fechas = [];
-    $inicioMes = strtotime(date('Y-m-01'));
-    $finMes = strtotime(date('Y-m-t'));
+    $inicioMes = strtotime(date('Y-m-01', strtotime($fecha_inicio)));
+    $finMes = strtotime(date('Y-m-t', strtotime($fecha_inicio)));
     for ($fecha = $inicioMes; $fecha <= $finMes; $fecha = strtotime('+1 day', $fecha)) {
         if (date('N', $fecha) < 6) { // Excluir sábados (6) y domingos (7)
             $fechas[] = date('Y-m-d', $fecha);
@@ -150,3 +164,4 @@ function obtenerFechasMes() {
     }
     return $fechas;
 }
+?>

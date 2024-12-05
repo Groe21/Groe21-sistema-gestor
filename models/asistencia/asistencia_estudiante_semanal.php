@@ -115,7 +115,7 @@ if (isset($_GET['id_estudiante']) && isset($_GET['fecha'])) {
         $stmt = $pdo->prepare($sql);
         $stmt->execute([':id_estudiante' => $id_estudiante, ':fecha' => $fecha]);
         $asistencia = $stmt->fetch(PDO::FETCH_ASSOC);
-        $asistencias[] = $asistencia && $asistencia['estado'] == 'Presente' ? 'X' : 'Asistió';
+        $asistencias[] = $asistencia && $asistencia['estado'] == 'Presente' ? 'Asistió' : 'X';
     }
 
     if ($estudiante) {
@@ -147,7 +147,9 @@ if (isset($_GET['id_estudiante']) && isset($_GET['fecha'])) {
 
 function obtenerFechasSemana($fecha_inicio) {
     $fechas = [];
-    $inicioSemana = strtotime('last monday', strtotime($fecha_inicio));
+    $inicioSemana = strtotime($fecha_inicio);
+    $diaSemana = date('N', $inicioSemana); // Obtener el día de la semana (1 para lunes, 7 para domingo)
+    $inicioSemana = strtotime('-' . ($diaSemana - 1) . ' days', $inicioSemana); // Ajustar al lunes de esa semana
     for ($i = 0; $i < 5; $i++) { // Solo de lunes a viernes
         $fechas[] = date('Y-m-d', strtotime("+$i days", $inicioSemana));
     }
@@ -166,3 +168,4 @@ function traducirDia($diaIngles) {
     ];
     return $dias[$diaIngles];
 }
+?>

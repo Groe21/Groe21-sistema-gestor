@@ -2,14 +2,18 @@
       <div class="row pt-5">
       <div class="col-lg-3 col-md-6 mb-5">
         <a href="" class="navbar-brand font-weight-bold text-primary m-0 mb-4 p-0" style="font-size: 40px; line-height: 40px">
-        <span class="text-white">Footer Title</span>
+        <span class="text-white">Las Aguilas del Saber</span>
         </a>
-        <p>Example content for the footer.</p>
+        <p>Las Águilas del Saber es un destacado centro educativo particular 
+          comprometido con la excelencia académica y el desarrollo integral de 
+          sus estudiantes. Nuestra institución se enorgullece de ofrecer un 
+          entorno educativo estimulante y enriquecedor, donde cada estudiante 
+          es inspirado a alcanzar su máximo potencial.</p>
         <div class="d-flex justify-content-start mt-4">
-        <a class="btn btn-outline-primary rounded-circle text-center text-white mr-2 px-0" style="width: 38px; height: 38px" href="#">
+        <a class="btn btn-outline-primary rounded-circle text-center text-white mr-2 px-0" style="width: 38px; height: 38px" href="https://www.facebook.com/Lasaguilasdelsaber" target="_blank">
           <i class="fab fa-facebook-f text-white"></i>
         </a>
-        <a class="btn btn-outline-primary rounded-circle text-center text-white mr-2 px-0" style="width: 38px; height: 38px" href="#">
+        <a class="btn btn-outline-primary rounded-circle text-center text-white mr-2 px-0" style="width: 38px; height: 38px" href="https://www.instagram.com/ebp_lasaguilasdelsaber?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank">
           <i class="fab fa-instagram text-white"></i>
         </a>
         </div>
@@ -19,21 +23,21 @@
         <h4 class="fa fa-map-marker-alt text-primary"></h4>
         <div class="pl-3">
           <h5 class="text-white">Ubicacion</h5>
-          <p>Example location content.</p>
+          <p>Calle Eloy Alfaro, Celica</p>
         </div>
         </div>
         <div class="d-flex">
         <h4 class="fa fa-envelope text-primary"></h4>
         <div class="pl-3">
           <h5 class="text-white">Correo Electronico</h5>
-          <p>example@example.com</p>
+          <p>las_aguilas_del_Saber@hotmail.com</p>
         </div>
         </div>
         <div class="d-flex">
         <h4 class="fa fa-phone-alt text-primary"></h4>
         <div class="pl-3">
           <h5 class="text-white">Celular</h5>
-          <p>+123456789</p>
+          <p>0979430945</p>
         </div>
         </div>
       </div>
