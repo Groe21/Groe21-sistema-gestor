@@ -2,12 +2,12 @@
 function conectarBaseDeDatos()
 {
     $host = 'localhost';
-    $port = '5432'; // Puerto por defecto de PostgreSQL
+    $port = '5432'; 
     $dbname = 'aguilas_del_saber'; // Nombre de la base de datos PostgreSQL
     $user = 'JavierSalinas'; // Nombre de usuario de PostgreSQL
     $password = 'admin'; // Contraseña de PostgreSQL
 
-    // Conexión a la base de datos
+    
     try {
         $pdo = new PDO("pgsql:host=$host;port=$port;dbname=$dbname", $user, $password);
         // Configuración para manejar errores y excepciones de PDO
@@ -15,11 +15,11 @@ function conectarBaseDeDatos()
         
     } catch (PDOException $e) {
         echo "Error de conexión: " . $e->getMessage();
-        exit(); // Si hay un error, termina el script
+        exit(); 
     }
     return $pdo;
 }
 
-// Ejemplo de cómo llamar a la función
+
 $conexion = conectarBaseDeDatos();
 ?>

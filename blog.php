@@ -67,15 +67,8 @@ $mostrarBlog = new MostrarBlog($pdo);
     </div>
     <!-- Header End -->
 
-    <!-- Detail Start -->
-    <div class="container py-5">
-      <div class="row pt-5">
-        <div class="col-lg-8">
-          <?php $mostrarBlog->mostrarTarjetaBlog();?>
-        </div>
-      </div>
-    </div>
-    <!-- Detail End -->
+    <?php $mostrarBlog->mostrarTarjetaBlog();?>
+    
 
     <!-- Footer Start -->
     <?php include_once(__DIR__ . '/include/pagina_principal/pie_de_pagina.php'); ?>

@@ -87,12 +87,20 @@ class MostrarBlog {
                 echo '<div class="col-12 text-center">No hay blogs disponibles.</div>';
             } else {
                 foreach ($blogs as $blog) {
-                    // Alternar clases de tamaño de imagen
-                    $imgClass = 'img-medium'; // Puedes cambiar esto según tus necesidades
-                    echo '<div class="mb-5">
-                            <img class="img-fluid rounded ' . $imgClass . ' mb-4" src="uploads/blog/' . htmlspecialchars($blog['imagen']) . '" alt="Image" />
-                            <h2 class="mb-4">' . htmlspecialchars($blog['titulo']) . '</h2>
-                            <p>' . htmlspecialchars($blog['contenido']) . '</p>
+                    echo '<div class="col-12 mb-5">
+                            <div class="card">
+                                <div class="row no-gutters">
+                                    <div class="col-md-8">
+                                        <div class="card-body">
+                                            <h2 class="card-title">' . htmlspecialchars($blog['titulo']) . '</h2>
+                                            <p class="card-text">' . htmlspecialchars($blog['contenido']) . '</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img class="img-fluid rounded-right" src="uploads/blog/' . htmlspecialchars($blog['imagen']) . '" alt="Image" />
+                                    </div>
+                                </div>
+                            </div>
                           </div>';
                 }
             }
